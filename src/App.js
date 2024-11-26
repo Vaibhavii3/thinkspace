@@ -9,6 +9,9 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Dashboard from './components/Dashboard';
+import NoteManagement from './components/NoteManagement';
+import ArchiveFeature from './components/ArchiveFeature';
+import TaggingSystem from './components/TaggingSystem';
 
 function App() {
 
@@ -48,6 +51,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/notemanagement" element={<NoteManagement />} />
+          <Route path="/archivefeature" element={<ArchiveFeature />} />
+          <Route path="/taggingsystem" element={<TaggingSystem />} />
 
         </Routes>
       </Router>

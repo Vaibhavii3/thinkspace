@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FaSave, FaMagic } from "react-icons/fa";
 
 const Dashboard = () => {
-  const [notesToday, setNotesToday] = useState(0);
-  const [notesThisWeek, setNotesThisWeek] = useState(0);
-  const [quickNote, setQuickNote] = useState("");
+  const [text, setText] = useState("");
+  const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
+
+  const handleChange = (e) => {
+    setText(e.target.value);
+    if (!showSaveButton && e.target.value.trim() !== "") {
+      setShowSaveButton(true);
+    }
+    if (e.target.value.trim() === "") {
+      setShowSaveButton(false);
+    }
+  };
+
 
   const quotes = [
     "The best way to predict the future is to create it.",
@@ -14,131 +25,72 @@ const Dashboard = () => {
     "Your limitation—it’s only your imagination.",
   ];
 
-  // Simulate fetching stats
-  useEffect(() => {
-    // Replace these with actual API calls
-    setNotesToday(5); // Example: 5 notes created today
-    setNotesThisWeek(25); // Example: 25 notes created this week
-
     // Randomize quote
+    useEffect(() => {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     setQuote(quotes[randomIndex]);
-  }, []);
+    }, []);
 
-  // Handle Quick Add Note
-  const handleQuickAdd = () => {
-    if (quickNote.trim()) {
-      // Replace this with an API call to save the note
-      alert(`Quick Note Added: "${quickNote}"`);
-      setQuickNote(""); // Clear the input field
-    }
+  const handleSave = () => {
+    // Save functionality placeholder
+    alert("Text saved!");
+    setShowSaveButton(false);
   };
 
   return (
-    <div
-      style={{
-        padding: "2rem",
-        background: "linear-gradient(135deg, #f4f4f4, #ffffff)",
-        fontFamily: "Arial, sans-serif",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Welcome Section */}
-      <header style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "2.5rem", color: "#6a0dad" }}>Welcome to ThinkSpace</h1>
-        <p style={{ fontSize: "1.2rem", color: "#555" }}>
-          "Your personal space for thoughts and ideas."
-        </p>
-      </header>
-
-      {/* Stats Section */}
-      <div
+    <div style={{ fontFamily: "Arial, sans-serif" }}>
+      {/* Navigation Bar */}
+      <nav
         style={{
           display: "flex",
-          justifyContent: "space-around",
-          marginBottom: "2rem",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "1rem",
+          background: "#6a0dad",
+          color: "#fff",
+          border: "2em",
+          borderRadius: "3%",
+          boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
         }}
       >
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          style={{
-            background: "#6a0dad",
-            color: "#fff",
-            padding: "1rem 2rem",
-            borderRadius: "8px",
-            textAlign: "center",
-            flex: "1",
-            margin: "0 0.5rem",
-          }}
-        >
-          <h3>Notes Today</h3>
-          <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{notesToday}</p>
-        </motion.div>
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          style={{
-            background: "#4a148c",
-            color: "#fff",
-            padding: "1rem 2rem",
-            borderRadius: "8px",
-            textAlign: "center",
-            flex: "1",
-            margin: "0 0.5rem",
-          }}
-        >
-          <h3>Notes This Week</h3>
-          <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{notesThisWeek}</p>
-        </motion.div>
-      </div>
-
-      {/* Quick Add Section */}
-      <div
-        style={{
-          marginBottom: "2rem",
-          textAlign: "center",
-        }}
-      >
-        <h3 style={{ marginBottom: "1rem", color: "#6a0dad" }}>Quick Add Note</h3>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <input
-            type="text"
-            value={quickNote}
-            onChange={(e) => setQuickNote(e.target.value)}
-            placeholder="Write a quick note..."
+        <h1 style={{ margin: 0 }}>ThinkSpace</h1>
+        <div>
+          {/* <Link
+            to="/dashboard"
             style={{
-              flex: "1",
-              maxWidth: "400px",
-              padding: "0.75rem",
-              borderRadius: "6px",
-              border: "1px solid #ddd",
-              fontSize: "1rem",
-              marginRight: "0.5rem",
-            }}
-          />
-          <button
-            onClick={handleQuickAdd}
-            style={{
-              padding: "0.75rem 1rem",
-              backgroundColor: "#6a0dad",
-              border: "none",
-              borderRadius: "8px",
               color: "#fff",
-              fontSize: "1rem",
-              cursor: "pointer",
+              margin: "0 1rem",
+              textDecoration: "none",
+              fontWeight: "bold",
             }}
           >
-            Add
-          </button>
+            Dashboard
+          </Link> */}
+          <Link
+            to="/pinned"
+            style={{
+              color: "#fff",
+              margin: "0 1rem",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Pinned Notes
+          </Link>
+          <Link
+            to="/archived"
+            style={{
+              color: "#fff",
+              margin: "0 1rem",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Archived Notes
+          </Link>
         </div>
-      </div>
+      </nav>
 
-      {/* Inspirational Quote Section */}
       <div
         style={{
           textAlign: "center",
@@ -151,8 +103,83 @@ const Dashboard = () => {
         <h3 style={{ color: "#6a0dad", marginBottom: "1rem" }}>Today's Inspiration</h3>
         <p style={{ fontSize: "1.25rem", fontStyle: "italic", color: "#555" }}>"{quote}"</p>
       </div>
+    
+
+      {/* Text Editor */}
+      <div
+        style={{
+          padding: "2rem",
+          minHeight: "calc(100vh - 100px)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          background: "#f4f4f4",
+        }}
+      >
+        <textarea
+          placeholder="Start writing here..."
+          value={text}
+          onChange={handleChange}
+          style={{
+            width: "100%",
+            maxWidth: "800px",
+            minHeight: "300px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            padding: "1rem",
+            fontSize: "1rem",
+            lineHeight: "1.6",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+            outline: "none",
+            resize: "none",
+          }}
+        />
+
+        {/* Save Button */}
+        {showSaveButton && (
+          <button
+            onClick={handleSave}
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              background: "#6a0dad",
+              color: "#fff",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "5px",
+              cursor: "pointer",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+            }}
+          >
+            <FaSave style={{ marginRight: "0.5rem" }} />
+            Save
+          </button>
+        )}
+
+        {/* AI Generation Button */}
+        <button
+          onClick={() => alert("AI Generation Coming Soon!")}
+          style={{
+            marginTop: "1rem",
+            background: "#ff9800",
+            color: "#fff",
+            border: "none",
+            padding: "0.75rem 1.5rem",
+            borderRadius: "8px",
+            fontSize: "1rem",
+            cursor: "pointer",
+            transition: "background 0.3s",
+          }}
+        >
+          <FaMagic style={{ marginRight: "0.5rem" }} />
+          AI Generate
+        </button>
+      </div>
     </div>
   );
 };
 
 export default Dashboard;
+
