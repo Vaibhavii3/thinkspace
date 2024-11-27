@@ -3,8 +3,8 @@ import { FaEdit, FaPalette, FaLock, FaSignOutAlt } from "react-icons/fa";
 
 const ProfilePage = () => {
   const user = {
-    name: "thinkspace",
-    email: "thinkspace@example.com",
+    name: "hello",
+    email: "hello@example.com",
     profilePicture:
       "IMG/p.jpg", 
   };

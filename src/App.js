@@ -32,22 +32,12 @@ function App() {
     document.documentElement.style.setProperty("--secondary-color", themeColors.secondary);
   }, [themeColors]);
 
-  // const [theme, setTheme] = useState("light");
-
-  // const toggleTheme = () => {
-  //   setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  // };
+  
 
   
 
     return (
-      // <div>
-      //   <header style={{ padding: "1rem", textAlign: "center" }}>
-      //     <h1 style={{ color: "var(--primary-color)" }}>ThinkSpace</h1>
-      //   </header>
-      //   <ThemeSettings themeColors={themeColors} setThemeColors={setThemeColors} />
-      //   <NotesPage />
-      // </div>
+      
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
