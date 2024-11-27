@@ -12,6 +12,7 @@ import Dashboard from './components/Dashboard';
 import NoteManagement from './components/NoteManagement';
 import ArchiveFeature from './components/ArchiveFeature';
 import TaggingSystem from './components/TaggingSystem';
+import ProfilePage from './components/ProfilePage';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
           <Route path="/notemanagement" element={<NoteManagement />} />
           <Route path="/archivefeature" element={<ArchiveFeature />} />
           <Route path="/taggingsystem" element={<TaggingSystem />} />
+          <Route path="/ProfilePage" element={<ProfilePage />} />
 
         </Routes>
       </Router>

@@ -37,6 +37,11 @@ const Dashboard = () => {
     setShowSaveButton(false);
   };
 
+  const user = {
+    name: "thinkspace",
+    profilePicture: "IMG/p.jpg",
+  };
+
   return (
     <div style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Navigation Bar */}
@@ -89,6 +94,23 @@ const Dashboard = () => {
             Archived Notes
           </Link>
         </div>
+
+        <div>
+        <Link to="/ProfilePage">
+          <img
+            src={user.profilePicture}
+            alt="Profile"
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              cursor: "pointer",
+              border: "2px solid #fff",
+            }}
+          />
+        </Link>
+      </div>
+
       </nav>
 
       <div
