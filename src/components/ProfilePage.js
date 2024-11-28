@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaEdit, FaPalette, FaLock, FaSignOutAlt } from "react-icons/fa";
 
 const ProfilePage = () => {
@@ -90,6 +91,7 @@ const ProfilePage = () => {
           <p style={{ color: "#666" }}>
             Personalize your experience with custom themes.
           </p>
+          <Link to="/ThemeCustomization">
           <button
             style={{
               backgroundColor: "#6a0dad",
@@ -104,6 +106,7 @@ const ProfilePage = () => {
           >
             Customize Theme
           </button>
+            </Link>
         </div>
 
         {/* Account Settings */}
