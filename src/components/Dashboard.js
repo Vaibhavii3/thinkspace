@@ -6,17 +6,7 @@ const Dashboard = () => {
   const [text, setText] = useState("");
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
-
-  const handleChange = (e) => {
-    setText(e.target.value);
-    if (!showSaveButton && e.target.value.trim() !== "") {
-      setShowSaveButton(true);
-    }
-    if (e.target.value.trim() === "") {
-      setShowSaveButton(false);
-    }
-  };
-
+  const [notes, setNotes] = useState([]);
 
   const quotes = [
     "The best way to predict the future is to create it.",
@@ -25,17 +15,57 @@ const Dashboard = () => {
     "Your limitation—it’s only your imagination.",
   ];
 
+  
+
     // Randomize quote
     useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    setQuote(quotes[randomIndex]);
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      setQuote(quotes[randomIndex]);
     }, []);
 
-  const handleSave = () => {
-    // Save functionality placeholder
-    alert("Text saved!");
-    setShowSaveButton(false);
-  };
+    useEffect(() => {
+      const fetchNotes = async () => {
+        try {
+          const response = await fetch("http://localhost:5000/api/notes");
+          const data = await response.json();
+          setNotes(data);
+        } catch (error) {
+          console.error("Error fetching notes:", error);
+        }
+      };
+    
+      fetchNotes();
+    }, []);
+    
+    const handleChange = (e) => {
+      setText(e.target.value);
+      setShowSaveButton(e.target.value.trim() !== "");
+    };
+
+    const handleSave = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/notes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text }),
+        });
+    
+        if (response.ok) {
+          const newNote = await response.json(); // Get the newly created note
+          setNotes((prevNotes) => [newNote, ...prevNotes]);
+          setText(""); // Clear the editor
+          setShowSaveButton(false);
+        } else {
+          alert("Failed to save the note.");
+        }
+      } catch (error) {
+        console.error("Error saving the note:", error);
+        alert("An error occurred while saving the note.");
+      }
+    };
+    
 
   const user = {
     name: "thinkspace",
@@ -60,17 +90,6 @@ const Dashboard = () => {
       >
         <h1 style={{ margin: 0 }}>ThinkSpace</h1>
         <div>
-          {/* <Link
-            to="/dashboard"
-            style={{
-              color: "#fff",
-              margin: "0 1rem",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
-            Dashboard
-          </Link> */}
           <Link
             to="/pinned"
             style={{
@@ -198,6 +217,29 @@ const Dashboard = () => {
           <FaMagic style={{ marginRight: "0.5rem" }} />
           AI Generate
         </button>
+
+        {/* Notes List */}
+        <div style={{ marginTop: "2rem", width: "100%", maxWidth: "800px" }}>
+          <h3>Saved Notes</h3>
+          {notes.length > 0 ? (
+            notes.map((note) => (
+              <div
+                key={note.id}
+                style={{
+                  border: "1px solid #ddd",
+                  borderRadius: "5px",
+                  padding: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                {note.text}
+              </div>
+            ))
+          ) : (
+            <p>No notes saved yet.</p>
+          )}
+        </div>
+
       </div>
     </div>
   );
