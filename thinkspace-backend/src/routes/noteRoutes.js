@@ -1,101 +1,94 @@
 const express = require("express");
 const router = express.Router();
-const Note = require('../models/NoteModel');
-
-// Placeholder data
-// let notes = [];
+const Note = require("../models/NoteModel");
 
 // Create a new note
-router.post('/', async (req, res) => {
+router.post("/api/notes", async (req, res) => {
+  try {
     const { title, text } = req.body;
 
+    // Validate fields
     if (!title || !text) {
-        return res.status(400).json({ message: "Title and text are required."});
+      return res.status(400).json({ message: "Title and text are required." });
     }
 
-    try {
-        const newNote = new Note({ title, text });
-        await newNote.save(); // Save the note to the database
-        res.status(201).json(newNote); // Respond with the newly created note
-    } catch (err) {
-        res.status(500).json({ message: 'Error creating note', error: err });
-    }
+    // Save note to DB
+    const newNote = await Note.create({ title, text });
+    res.status(201).json(newNote);
+  } catch (error) {
+    console.error("Error creating note:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
-
 // Get all notes
-router.get('/', async (req, res) => {
-    try {
-        const notes = await Note.find(); // Get all notes from the database
-        res.json(notes); // Respond with the notes
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching notes', error: err });
-    }
+router.get("/api/notes", async (req, res) => {
+  try {
+    const notes = await Note.find(); // Retrieve all notes
+    res.json(notes); // Respond with notes
+  } catch (error) {
+    console.error("Error fetching notes:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
 // Get a specific note by ID
-router.get('/:id', async (req, res) => {
-    try {
-        const note = await Note.findById(req.params.id); // Find a note by its ID
-        if (!note) {
-            return res.status(404).json({ message: 'Note not found' });
-        }
-        res.json(note); // Respond with the note
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching note', error: err });
+router.get("/api/notes/:id", async (req, res) => {
+  try {
+    const note = await Note.findById(req.params.id);
+
+    if (!note) {
+      return res.status(404).json({ message: "Note not found." });
     }
+
+    res.json(note);
+  } catch (error) {
+    console.error("Error fetching note:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
 // Update a note by ID
-router.put('/:id', async (req, res) => {
-    try {
-        const updatedNote = await Note.findByIdAndUpdate(
-            req.params.id,
-            { text: req.body.text, priority: req.body.priority },
-            { new: true } // Return the updated document
-        );
-        if (!updatedNote) {
-            return res.status(404).json({ message: 'Note not found' });
-        }
-        res.json(updatedNote); // Respond with the updated note
-    } catch (err) {
-        res.status(500).json({ message: 'Error updating note', error: err });
+router.put("/api/notes/:id", async (req, res) => {
+  const { title, text } = req.body;
+
+  // Validate fields
+  if (!title || !text) {
+    return res.status(400).json({ message: "Title and text are required." });
+  }
+
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(
+      req.params.id,
+      { title, text, updatedAt: Date.now() },
+      { new: true } // Return the updated note
+    );
+
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found." });
     }
+
+    res.status(200).json(updatedNote);
+  } catch (error) {
+    console.error("Error updating note:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
 });
 
 // Delete a note by ID
-router.delete('/:id', async (req, res) => {
-    try {
-        const deletedNote = await Note.findByIdAndDelete(req.params.id); // Delete a note by its ID
-        if (!deletedNote) {
-            return res.status(404).json({ message: 'Note not found' });
-        }
-        res.json({ message: 'Note deleted' }); // Respond with a success message
-    } catch (err) {
-        res.status(500).json({ message: 'Error deleting note', error: err });
-    }
-});
+router.delete("/api/notes/:id", async (req, res) => {
+  try {
+    const deletedNote = await Note.findByIdAndDelete(req.params.id);
 
-router.put('/api/notes/:id', async (req, res) => {
-    const { title, text } = req.body;
-  
-    try {
-      const note = await Note.findByIdAndUpdate(
-        req.params.id,
-        { title, text, updatedAt: Date.now() },
-        { new: true }
-      );
-  
-      if (!note) {
-        return res.status(404).json({ message: 'Note not found.' });
-      }
-  
-      res.status(200).json(note);
-    } catch (error) {
-      console.error('Error updating note:', error);
-      res.status(500).json({ message: 'Failed to update note.' });
+    if (!deletedNote) {
+      return res.status(404).json({ message: "Note not found." });
     }
-  });
-  
+
+    res.status(200).json({ message: "Note deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
 
 module.exports = router;

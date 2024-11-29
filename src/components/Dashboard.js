@@ -7,6 +7,7 @@ const Dashboard = () => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
   const [notes, setNotes] = useState([]);
+  const [title, setTitle] = useState("");
   // const [selectedNote, setSelectedNote] = useState(null);
   // const [showModal, setShowModal] = useState(false);
 
@@ -40,6 +41,28 @@ const Dashboard = () => {
     const handleChange = (e) => {
       setText(e.target.value);
       setShowSaveButton(e.target.value.trim() !== "");
+    };
+
+    const handleAddNote = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/notes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, text }),
+        });
+
+        if(response.ok) {
+          alert("Note added successfully");
+          setTitle("");
+          setText("");
+        } else {
+          console.error("Failed to add note.");
+        }
+      } catch (error) {
+        console.error("Error adding note:", error);
+      }
     };
 
     const handleSave = async () => {
@@ -168,6 +191,20 @@ const Dashboard = () => {
           background: "#f4f4f4",
         }}
       >
+        {/* <input 
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Enter title"
+          style={{
+            display: "block",
+            marginBottom: "1rem",
+            padding: "0.5rem",
+            width: "100%",
+            boxSizing: "border-box",
+          }}
+          /> */}
+
         <textarea
           placeholder="Start writing here..."
           value={text}

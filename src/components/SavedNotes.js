@@ -73,7 +73,7 @@ const SavedNotes = () => {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <h2 style={{ color: "#6a0dad", marginBottom: "1rem" }}>Saved Notes</h2>
+      <h2 style={{ color: "#6a0dad", marginBottom: "1rem", textAlign: "center" }}>Saved Notes</h2>
 
       {isEditing ? (
         <div style={{ marginBottom: "1rem" }}>
@@ -97,7 +97,7 @@ const SavedNotes = () => {
           <textarea
             value={editNote.text}
             onChange={(e) =>
-              setEditNote((prev) => ({ ...prev, text: e.target.value }))
+                setEditNote((prev) => ({ ...prev, text: e.target.value }))
             }
             style={{
               marginBottom: "0.5rem",
@@ -107,6 +107,7 @@ const SavedNotes = () => {
             }}
             placeholder="Edit Text"
           />
+        
           <button
             onClick={handleSaveEdit}
             style={{
@@ -136,42 +137,70 @@ const SavedNotes = () => {
           </button>
         </div>
       ) : (
-        notes.map((note) => (
-          <div
-            key={note._id}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "1rem",
-              marginBottom: "1rem",
-              position: "relative",
-            }}
-          >
-            <h3>{note.title}</h3>
-            <p>{note.text}</p>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1rem",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {notes.map((note) => (
             <div
+              key={note._id}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "1rem",
+                border: "1px solid #ddd",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                padding: "1rem",
+                marginBottom: "1rem",
+                position: "relative",
+                backgroundColor: "#fff",
+                maxWidth: "300px",
+                width: "100%",
+                flex: "1 1 calc(33% - 1rem)",
+                boxSizing: "border-box",
               }}
             >
-              <small>
-                Created: {new Date(note.createdAt).toLocaleString()}
-                {note.updatedAt &&
+              <h3
+                style={{
+                  marginBottom: "0.5rem",
+                  fontWeight: "bold",
+                  color: "#333",
+                  borderBottom: "2px solid black",
+                  paddingBottom: "0.5rem",
+                }}
+              >
+                {note.title || "Untitled Note"}
+              </h3>
+              <p>{note.text}</p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "1rem",
+                }}
+              >
+                <small>
+                  Created: {new Date(note.createdAt).toLocaleString()}
+                  {note.updatedAt &&
                   ` | Last Edited: ${new Date(note.updatedAt).toLocaleString()}`}
-              </small>
-              <div>
-                <button onClick={() => handleEditClick(note)} style={{ marginRight: "0.5rem" }}>
-                  <FaEdit />
-                </button>
-                <button onClick={() => handleDelete(note._id)}>
-                  <FaTrash />
-                </button>
+                </small>
+                <div>
+                  <button
+                    onClick={() => handleEditClick(note)}
+                    style={{ marginRight: "0.5rem" }}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button onClick={() => handleDelete(note._id)}>
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );
