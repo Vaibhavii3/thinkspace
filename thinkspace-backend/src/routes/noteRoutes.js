@@ -7,11 +7,14 @@ const Note = require('../models/NoteModel');
 
 // Create a new note
 router.post('/', async (req, res) => {
+    const { title, text } = req.body;
+
+    if (!title || !text) {
+        return res.status(400).json({ message: "Title and text are required."});
+    }
+
     try {
-        const newNote = new Note({
-            text: req.body.text,
-            priority: req.body.priority,
-        });
+        const newNote = new Note({ title, text });
         await newNote.save(); // Save the note to the database
         res.status(201).json(newNote); // Respond with the newly created note
     } catch (err) {
@@ -73,5 +76,26 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.put('/api/notes/:id', async (req, res) => {
+    const { title, text } = req.body;
+  
+    try {
+      const note = await Note.findByIdAndUpdate(
+        req.params.id,
+        { title, text, updatedAt: Date.now() },
+        { new: true }
+      );
+  
+      if (!note) {
+        return res.status(404).json({ message: 'Note not found.' });
+      }
+  
+      res.status(200).json(note);
+    } catch (error) {
+      console.error('Error updating note:', error);
+      res.status(500).json({ message: 'Failed to update note.' });
+    }
+  });
+  
 
 module.exports = router;

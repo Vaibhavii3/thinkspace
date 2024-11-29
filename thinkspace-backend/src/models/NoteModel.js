@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
 
-const noteSchema = new mongoose.Schema({
-    text: {
-        type: String,
-        required: true,
-        trime: true
+const noteSchema = new mongoose.Schema(
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        text: {
+            type: String,
+            required: true,
+        },
     },
-    priority: {
-        type: String,
-        enum: ['High', 'Medium', 'Low'],
-        default: 'Medium'
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
+    {
+        timestamps : true,
     }
-});
+);
 
 const Note = mongoose.model('Note', noteSchema);
 
