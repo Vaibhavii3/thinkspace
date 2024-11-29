@@ -9,12 +9,9 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Dashboard from './components/Dashboard';
-import NoteManagement from './components/NoteManagement';
-import ArchiveFeature from './components/ArchiveFeature';
-import TaggingSystem from './components/TaggingSystem';
 import ProfilePage from './components/ProfilePage';
 import ThemeCustomization from './components/ThemeCustomization';
-
+import SavedNotes from './components/SavedNotes';
 
 function App() {
 
@@ -44,12 +41,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/notemanagement" element={<NoteManagement />} />
-          <Route path="/archivefeature" element={<ArchiveFeature />} />
-          <Route path="/taggingsystem" element={<TaggingSystem />} />
           <Route path="/ProfilePage" element={<ProfilePage />} />
           <Route path="/ThemeCustomization" element={<ThemeCustomization />} />
-
+          <Route path="/saved-notes" element={<SavedNotes />} />
         </Routes>
       </Router>
     );

@@ -7,6 +7,8 @@ const Dashboard = () => {
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
   const [notes, setNotes] = useState([]);
+  // const [selectedNote, setSelectedNote] = useState(null);
+  // const [showModal, setShowModal] = useState(false);
 
   const quotes = [
     "The best way to predict the future is to create it.",
@@ -14,8 +16,6 @@ const Dashboard = () => {
     "Success is the sum of small efforts, repeated daily.",
     "Your limitation—it’s only your imagination.",
   ];
-
-  
 
     // Randomize quote
     useEffect(() => {
@@ -66,7 +66,6 @@ const Dashboard = () => {
       }
     };
     
-
   const user = {
     name: "thinkspace",
     profilePicture: "IMG/p.jpg",
@@ -112,6 +111,17 @@ const Dashboard = () => {
           >
             Archived Notes
           </Link>
+          <Link
+            to="/saved-notes"
+            style={{
+              color: "#fff",
+              margin: "0 1rem",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Saved Notes
+          </Link>
         </div>
 
         <div>
@@ -131,7 +141,7 @@ const Dashboard = () => {
       </div>
 
       </nav>
-
+            {/* quote section  */}
       <div
         style={{
           textAlign: "center",
@@ -183,7 +193,7 @@ const Dashboard = () => {
             onClick={handleSave}
             style={{
               position: "absolute",
-              top: "20px",
+              top: "95px",
               right: "20px",
               background: "#6a0dad",
               color: "#fff",
@@ -217,30 +227,8 @@ const Dashboard = () => {
           <FaMagic style={{ marginRight: "0.5rem" }} />
           AI Generate
         </button>
+          </div>
 
-        {/* Notes List */}
-        <div style={{ marginTop: "2rem", width: "100%", maxWidth: "800px" }}>
-          <h3>Saved Notes</h3>
-          {notes.length > 0 ? (
-            notes.map((note) => (
-              <div
-                key={note.id}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "5px",
-                  padding: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
-                {note.text}
-              </div>
-            ))
-          ) : (
-            <p>No notes saved yet.</p>
-          )}
-        </div>
-
-      </div>
     </div>
   );
 };
