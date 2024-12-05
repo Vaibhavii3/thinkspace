@@ -1,0 +1,117 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+.edit-note-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 50vh;
+    padding: 10px;
+}
+
+.input {
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+
+.saved-notes-title {
+    padding: 20px;
+}
+
+  /* Main Container */
+.saved-notes-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #2a2a72, #009ffd);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    color: #fff;
+}
+
+  /* Notes Grid */
+.notes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+}
+
+  /* Note Box */
+.note-box {
+    background: #ffffff;
+    color: #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 280px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+  /* Title */
+.note-box h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+  /* Line between Title and Text */
+.note-box h3::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #ccc;
+    margin-top: 8px;
+}
+
+  /* Text */
+.note-box p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 10px 0;
+    flex-grow: 1;
+}
+
+  /* Buttons Container */
+.buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+  /* Buttons Styling */
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button svg {
+    vertical-align: middle;
+}
+
+button.edit-btn {
+    background-color: #4caf50;
+    color: white;
+}
+
+button.delete-btn {
+    background-color: #f44336;
+    color: white;
+}

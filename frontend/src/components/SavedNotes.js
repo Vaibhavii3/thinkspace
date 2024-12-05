@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaTrash, FaEdit, FaThumbtack, FaArchive } from "react-icons/fa";
+import "../styles/saveNote.css";
 
 const SavedNotes = () => {
   const [notes, setNotes] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editNote, setEditNote] = useState({ id: "", title: "", text: "" });
-
-
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -70,32 +69,41 @@ const SavedNotes = () => {
 
   return (
 
-  <div>
+  <div className="saved-notes-container">
+    <div className="saved-notes-title" >
+      <h1> Saved Notes </h1>
+    </div>
       {isEditing ? (
-        <div>
+        <div className="edit-note-form">
           <input
             type="text"
             value={editNote.title}
             onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
             placeholder="Edit Title"
+            className="input"
           />
           <textarea
             value={editNote.text}
             onChange={(e) => setEditNote({ ...editNote, text: e.target.value })}
             placeholder="Edit Text"
+            className="input"
           />
-          <button onClick={handleSaveEdit}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <button onClick={handleSaveEdit} className="edit-btn">Save</button>
+          <button onClick={() => setIsEditing(false)} className="delete-btn">Cancel</button>
         </div>
       ) : (
-        notes.map((note) => (
-          <div key={note._id}>
-            <h3>{note.title}</h3>
-            <p>{note.text}</p>
-            <button onClick={() => handleEditClick(note)}><FaEdit /></button>
-            <button onClick={() => handleDelete(note._id)}><FaTrash /></button>
-          </div>
-        ))
+        <div className="notes-grid">
+          {notes.map((note) => (
+            <div key={note._id} className="note-box">
+                <h3>{note.title}</h3>
+                <p>{note.text}</p>
+                <div className="buttons">
+                  <button className="edit-btn" onClick={() => handleEditClick(note)}><FaEdit /></button>
+                  <button className="delete-btn" onClick={() => handleDelete(note._id)}><FaTrash /></button>
+              </div>
+            </div>
+          ))}
+        </div>  
       )}
     </div>
   );
