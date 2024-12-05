@@ -2,6 +2,25 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const LoginPage = () => {
+
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    if (!email || !password) {
+      alert("please fill out all fields.");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+  }
+
   return (
     <div
       style={{
@@ -28,7 +47,7 @@ const LoginPage = () => {
         <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#6a0dad" }}>
           Login
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: "1rem" }}>
             <label
               htmlFor="email"
@@ -40,6 +59,7 @@ const LoginPage = () => {
               type="email"
               id="email"
               placeholder="Enter your email"
+              aria-required="true"
               style={{
                 width: "100%",
                 padding: "0.75rem",
@@ -48,6 +68,7 @@ const LoginPage = () => {
                 fontSize: "1rem",
               }}
             />
+            
           </div>
           <div style={{ marginBottom: "1rem" }}>
             <label
@@ -68,6 +89,7 @@ const LoginPage = () => {
                 fontSize: "1rem",
               }}
             />
+            
           </div>
           <button
             type="submit"
@@ -84,6 +106,11 @@ const LoginPage = () => {
           >
             Login
           </button>
+          const [showPassword, setShowPassword] = React.useState(false);
+
+
+
+
         </form>
         <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
           Don't have an account?{" "}

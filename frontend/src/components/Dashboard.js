@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSave, FaMagic } from "react-icons/fa";
+import SavedNotes from "./SavedNotes";
 
 const Dashboard = () => {
   const [text, setText] = useState("");
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
   const [notes, setNotes] = useState([]);
-  const [title, setTitle] = useState("");
-  // const [selectedNote, setSelectedNote] = useState(null);
-  // const [showModal, setShowModal] = useState(false);
+  
 
   const quotes = [
     "The best way to predict the future is to create it.",
@@ -27,7 +26,7 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchNotes = async () => {
         try {
-          const response = await fetch("http://localhost:5000/api/notes");
+          const response = await fetch("http://localhost:5000/api/v1/notes");
           const data = await response.json();
           setNotes(data);
         } catch (error) {
@@ -43,31 +42,9 @@ const Dashboard = () => {
       setShowSaveButton(e.target.value.trim() !== "");
     };
 
-    const handleAddNote = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/notes", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ title, text }),
-        });
-
-        if(response.ok) {
-          alert("Note added successfully");
-          setTitle("");
-          setText("");
-        } else {
-          console.error("Failed to add note.");
-        }
-      } catch (error) {
-        console.error("Error adding note:", error);
-      }
-    };
-
     const handleSave = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/notes", {
+        const response = await fetch("http://localhost:5000/api/v1/notes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -191,19 +168,6 @@ const Dashboard = () => {
           background: "#f4f4f4",
         }}
       >
-        {/* <input 
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter title"
-          style={{
-            display: "block",
-            marginBottom: "1rem",
-            padding: "0.5rem",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-          /> */}
 
         <textarea
           placeholder="Start writing here..."
@@ -265,7 +229,7 @@ const Dashboard = () => {
           AI Generate
         </button>
           </div>
-
+          <SavedNotes notes={notes} />
     </div>
   );
 };

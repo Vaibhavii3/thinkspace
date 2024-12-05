@@ -1,9 +1,5 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-// import { ThemeProvider } from 'styled-components';
-// import NotesPage from './components/NotesPage';
-// import { FiSun, FiMoon } from "react-icons/fi";
-// import ThemeSettings from './styles/themeSettings';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
@@ -28,10 +24,6 @@ function App() {
     document.documentElement.style.setProperty("--primary-color", themeColors.primary);
     document.documentElement.style.setProperty("--secondary-color", themeColors.secondary);
   }, [themeColors]);
-
-  
-
-  
 
     return (
       
