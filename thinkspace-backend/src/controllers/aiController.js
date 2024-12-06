@@ -12,7 +12,7 @@ const generateAIContent = async (req, res) => {
     try {
         console.log("Received prompt:", prompt);
     // Call API
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
+        const apiUrl = process.env.URL;
         const apiKey = process.env.API_KEY;
 
         // Prepare the request body
