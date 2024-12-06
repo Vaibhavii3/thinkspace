@@ -1,9 +1,11 @@
-// server.js
 const express = require("express");
-// const mongoose = require("mongoose");
 const cors = require("cors");
-const noteRoutes = require("./src/routes/noteRoutes");
+const bodyParser = require("body-parser");
+const axios = require("axios");
 require("dotenv").config(); 
+
+const noteRoutes = require("./src/routes/noteRoutes");
+const aiRoutes = require("./src/routes/aiRoutes");
 
 const connectDB = require("../thinkspace-backend/src/config/db");
 
@@ -16,14 +18,9 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-//connect to mongoose
-// mongoose
-//     .connect(process.env.MONGO_URI)
-//     .then(() => console.log("Connected to MongoDB"))
-//     .catch((err) => console.error("Failed to connect to MongoDB", err));
-
 // Routes    
 app.use("/api/v1/notes", noteRoutes);
+app.use("/api", aiRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
