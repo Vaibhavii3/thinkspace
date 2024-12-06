@@ -12,8 +12,8 @@
 # production
 /build
 
-/frontend/.env 
-/backend/.env 
+/thinkspace-frontend/.env 
+/thinkspace-backend/.env 
 /frontend/NOTE.txt
 
 # misc
