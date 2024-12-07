@@ -1,5 +1,5 @@
-// const axios = require("axios");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const axios = require("axios");
+const Content = require('../models/Content');
 
 // Controller for AI content generation
 const generateAIContent = async (req, res) => {
@@ -9,9 +9,15 @@ const generateAIContent = async (req, res) => {
         return res.status(400).json({ error: "Prompt is required" });
     }
 
+    
+
+    // if (!apiUrl || !apiKey) {
+    //     return res.status(500).json({ error: "API URL or API Key is missing in environment variables." });
+    // }
+
     try {
         console.log("Received prompt:", prompt);
-    // Call API
+
         const apiUrl = process.env.URL;
         const apiKey = process.env.API_KEY;
 
@@ -36,20 +42,27 @@ const generateAIContent = async (req, res) => {
         });
 
         console.log("Gemini AI response:", response.data);
-        
-        const generatedContent = response.data?.cantents?.[0]?.parts?.[0]?.text;
+
+        // Extract generated content
+        const generatedContent = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (!generatedContent) {
-            throw new Error("Empty response from Google Generative AI");
+            throw new Error("Empty response from Gemini AI.");
         }
 
-        res.status(200).json({ result: generatedContent });
-        
-    } catch (error) {
-        console.error("Error with AI content generation:", error.response?.data || error.message);
-        res.status(500).json({ error: error.message || "Internal Server Error" });
-    }
+        // Optionally save the content to the database
+        // const content = new Content({ inputText: prompt, generatedText: generatedContent });
+        // await content.save();
 
+        res.status(200).json({ result: generatedContent });
+
+    } catch (error) {
+        console.error("Error with AI content generation:", error);
+        res.status(400).json({
+            error: error.response?.data?.error?.message || "Invalid request to AI API",
+
+        });
+    }
 };
 
 module.exports = { generateAIContent };
