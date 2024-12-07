@@ -211,23 +211,25 @@ const Dashboard = () => {
         )}
 
         {/* AI Generation Button */}
-        <button
-          onClick={() => alert("AI Generation Coming Soon!")}
-          style={{
-            marginTop: "1rem",
-            background: "#ff9800",
-            color: "#fff",
-            border: "none",
-            padding: "0.75rem 1.5rem",
-            borderRadius: "8px",
-            fontSize: "1rem",
-            cursor: "pointer",
-            transition: "background 0.3s",
-          }}
-        >
-          <FaMagic style={{ marginRight: "0.5rem" }} />
-          AI Generate
-        </button>
+            <Link to="/AiGen">
+              <button
+                // onClick={() => alert("AI Generation Coming Soon!")}
+                style={{
+                  marginTop: "1rem",
+                  background: "#ff9800",
+                  color: "#fff",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "8px",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  transition: "background 0.3s",
+                }}
+              >
+                <FaMagic style={{ marginRight: "0.5rem" }} />
+                AI Generate
+              </button>
+            </Link>
           </div>
           <SavedNotes notes={notes} />
     </div>

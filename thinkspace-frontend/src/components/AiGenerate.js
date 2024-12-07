@@ -36,19 +36,20 @@ function AiGenerate() {
 };
 
 return (
-    <div className="app">
-        <h1>AI Content Generator</h1>
-        <form onSubmit={handleGenerate} className="form">
+    <div className="app-container">
+        <h1 className="title"> ✨ AI Content Generator ✨ </h1>
+        <form onSubmit={handleGenerate} className="ai-form">
 
             <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Enter your topic or prompt here..."
             rows="5"
+            className="prompt-input"
             required
             ></textarea>
 
-            <button type="submit" disabled={loading}>
+            <button type="submit" className="generate-btn"  disabled={loading}>
                 {loading ? "Generating..." : "Generate"}
             </button>
 
@@ -58,8 +59,8 @@ return (
 
         {result && (
             <div className="result">
-                <h3>Generated Content:</h3>
-                <p>{result}</p>
+                <h3 className="result-title">Generated Content:</h3>
+                <p className="result-content">{result}</p>
             </div>
         )}
     </div>

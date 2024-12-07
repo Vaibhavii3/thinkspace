@@ -1,0 +1,89 @@
+/* General Container Styles */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #000000, #6a0dad);
+    color: #fff;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Login Form Styles */
+.login-form {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: #333;
+    text-align: center;
+}
+
+/* Title */
+.login-title {
+    margin-bottom: 1rem;
+    color: #6a0dad;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+/* Login Button */
+.login-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #6a0dad;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.login-button:hover {
+    background-color: #8240c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(106, 13, 173, 0.5);
+}
+
+/* Sign-Up Link */
+.signup-text {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.signup-link {
+    color: #6a0dad;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* .signup-link:hover {
+    text-decoration: underline;
+} */

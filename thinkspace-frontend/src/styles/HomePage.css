@@ -1,0 +1,63 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #000000, #6a0dad);
+    color: #fff;
+}
+
+/* Container */
+.homepage-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Title */
+.homepage-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    background: rgba(106, 13, 173, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+/* Quote */
+.homepage-quote {
+    font-size: 1.5rem;
+    font-style: italic;
+    max-width: 600px;
+    line-height: 1.8;
+    margin: 0;
+    padding: 0 1rem;
+}
+
+/* Button Container */
+.homepage-button-container {
+    margin-top: 2rem;
+}
+
+/* Get Started Button */
+.homepage-get-started-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #6a0dad;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.homepage-get-started-btn:hover {
+    background-color: #8240c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(106, 13, 173, 0.5);
+}

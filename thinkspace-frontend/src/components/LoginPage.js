@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
+import "../styles/LoginPage.css";
 
 const LoginPage = () => {
-
+  const [showPassword, setShowPassword] = useState(false);
 
 
   const handleSubmit = (event) => {
@@ -22,37 +23,14 @@ const LoginPage = () => {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        background: "linear-gradient(135deg, #000000, #6a0dad)",
-        color: "#fff",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "400px",
-          background: "#fff",
-          padding: "2rem",
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-          color: "#333",
-        }}
-      >
-        <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#6a0dad" }}>
-          Login
-        </h2>
+    <div className="login-container">
+      <div className="login-form">
+        <h2 className="login-title"> Login </h2>
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "1rem" }}>
+          <div className="form-group">
             <label
               htmlFor="email"
-              style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem" }}
-            >
+              className="form-label">
               Email
             </label>
             <input
@@ -60,20 +38,14 @@ const LoginPage = () => {
               id="email"
               placeholder="Enter your email"
               aria-required="true"
-              style={{
-                width: "100%",
-                padding: "0.75rem",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "1rem",
-              }}
+              className="form-input"
             />
-            
           </div>
-          <div style={{ marginBottom: "1rem" }}>
+
+          <div className="form-group">
             <label
               htmlFor="password"
-              style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.9rem" }}
+              className="form-label"
             >
               Password
             </label>
@@ -81,43 +53,22 @@ const LoginPage = () => {
               type="password"
               id="password"
               placeholder="Enter your password"
-              style={{
-                width: "100%",
-                padding: "0.75rem",
-                borderRadius: "6px",
-                border: "1px solid #ddd",
-                fontSize: "1rem",
-              }}
+              className="form-input"
             />
-            
           </div>
+
           <button
             type="submit"
-            style={{
-              width: "100%",
-              padding: "0.75rem",
-              backgroundColor: "#6a0dad",
-              border: "none",
-              borderRadius: "8px",
-              color: "#fff",
-              fontSize: "1rem",
-              cursor: "pointer",
-            }}
-          >
+            className="login-button">
             Login
           </button>
-          const [showPassword, setShowPassword] = React.useState(false);
-
-
-
-
         </form>
-        <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
+
+        <p className="signup-text">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            style={{ color: "#6a0dad", textDecoration: "none", fontWeight: "bold" }}
-          >
+            className="signup-link">
             Sign Up
           </Link>
         </p>
