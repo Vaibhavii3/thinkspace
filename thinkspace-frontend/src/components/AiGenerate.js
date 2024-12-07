@@ -62,7 +62,12 @@ return (
         {result && (
             <div className="result">
                 <h3 className="result-title">Generated Content:</h3>
-                <p className="result-content">{result}</p>
+                {/* <p className="result-content">{result}</p> */}
+                <ul className="result-content">
+                {result.split("\n").filter(line => line.trim() !== "").map((line, index) => (
+                <li key={index}>{line}</li>
+            ))}
+                </ul>
             </div>
         )}
     </div>

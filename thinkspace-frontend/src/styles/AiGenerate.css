@@ -6,8 +6,9 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    height: 100vh;
+    min-height: 100vh;
     padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 
@@ -94,7 +95,9 @@
     margin-top: 2rem;
     padding: 1rem;
     /* background: rgba(255, 255, 255, 0.15); */
-    background: rgba(255, 255, 255,);
+    /* background: rgba(255, 255, 255,); */
+    /* background: linear-gradient(135deg, #a838a8, #ffbf86); */
+
     border-radius: 8px;
     text-align: left;
     animation: fadeIn 0.5s ease-in-out;
@@ -111,6 +114,12 @@
     color: #ffffff;
     font-size: 1rem;
     line-height: 1.5;
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.result-content li {
+    margin-bottom: 0.5rem;
 }
 
 /* Animations */

@@ -6,7 +6,7 @@ const HomePage = () => {
   const quote = "The best way to predict the future is to create it.";
 
   return (
-    <div>
+    <div className="home">
       <div className="homepage-container">
         <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem", background: "theme.secondary", }}>ThinkSpace</h1>
         <p className="homepage-quote">
@@ -20,7 +20,7 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 
