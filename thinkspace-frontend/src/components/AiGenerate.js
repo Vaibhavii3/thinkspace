@@ -36,6 +36,8 @@ function AiGenerate() {
 };
 
 return (
+    <div className="ai-generate-container">
+
     <div className="app-container">
         <h1 className="title"> ✨ AI Content Generator ✨ </h1>
         <form onSubmit={handleGenerate} className="ai-form">
@@ -63,6 +65,7 @@ return (
                 <p className="result-content">{result}</p>
             </div>
         )}
+    </div>
     </div>
     );
 }

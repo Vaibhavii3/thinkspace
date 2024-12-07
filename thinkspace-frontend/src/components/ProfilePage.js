@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaPalette, FaLock, FaSignOutAlt } from "react-icons/fa";
+import "../styles/ProfilePage.css";
 
 const ProfilePage = () => {
   const user = {
@@ -12,97 +13,47 @@ const ProfilePage = () => {
 
   return (
     <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        padding: "2rem",
-        backgroundColor: "#f4f4f4",
-        minHeight: "100vh",
-      }}
+      className="profile-container"
     >
       {/* Profile Header */}
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "#fff",
-          padding: "1.5rem",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          marginBottom: "2rem",
-        }}
+        className="profile-header"
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="profile-info">
           <img
             src={user.profilePicture}
             alt="Profile"
-            style={{
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              objectFit: "cover",
-              marginRight: "1rem",
-            }}
+            className="profile-picture"
           />
           <div>
-            <h2 style={{ margin: 0 }}>{user.name}</h2>
-            <p style={{ margin: 0, color: "#666" }}>{user.email}</p>
+            <h2 className="profile-name">{user.name}</h2>
+            <p className="profile-email">{user.email}</p>
           </div>
         </div>
         <button
-          style={{
-            backgroundColor: "#6a0dad",
-            color: "#fff",
-            border: "none",
-            padding: "0.5rem 1rem",
-            borderRadius: "5px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            fontWeight: "bold",
-            fontSize: "0.9rem",
-          }}
+          className="edit-button"
         >
-          <FaEdit style={{ marginRight: "0.5rem" }} />
+          <FaEdit className="icon" />
           Edit Profile
         </button>
       </div>
 
       {/* Options Section */}
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: "1.5rem",
-        }}
+        className="profile-options"
       >
         {/* Theme Customization */}
         <div
-          style={{
-            backgroundColor: "#fff",
-            padding: "1.5rem",
-            borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            textAlign: "center",
-          }}
+          className="profile-option-card"
         >
-          <FaPalette style={{ fontSize: "2rem", color: "#6a0dad" }} />
-          <h3 style={{ margin: "1rem 0" }}>Theme Customization</h3>
-          <p style={{ color: "#666" }}>
+          <FaPalette className="option-icon" />
+          <h3>Theme Customization</h3>
+          <p>
             Personalize your experience with custom themes.
           </p>
           <Link to="/ThemeCustomization">
           <button
-            style={{
-              backgroundColor: "#6a0dad",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-            }}
+            className="option-button"
           >
             Customize Theme
           </button>
@@ -111,62 +62,27 @@ const ProfilePage = () => {
 
         {/* Account Settings */}
         <div
-          style={{
-            backgroundColor: "#fff",
-            padding: "1.5rem",
-            borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            textAlign: "center",
-          }}
+          className="profile-option-card"
         >
-          <FaLock style={{ fontSize: "2rem", color: "#6a0dad" }} />
-          <h3 style={{ margin: "1rem 0" }}>Account Settings</h3>
-          <p style={{ color: "#666" }}>
+          <FaLock className="option-icon" />
+          <h3>Account Settings</h3>
+          <p>
             Manage your password and account preferences.
           </p>
-          <button
-            style={{
-              backgroundColor: "#6a0dad",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-            }}
-          >
+          <button className="option-button">
             Change Password
           </button>
         </div>
 
         {/* Logout */}
         <div
-          style={{
-            backgroundColor: "#fff",
-            padding: "1.5rem",
-            borderRadius: "8px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            textAlign: "center",
-          }}
-        >
-          <FaSignOutAlt style={{ fontSize: "2rem", color: "#6a0dad" }} />
-          <h3 style={{ margin: "1rem 0" }}>Logout</h3>
-          <p style={{ color: "#666" }}>
+          className="profile-option-card">
+          <FaSignOutAlt className="option-icon" />
+          <h3>Logout</h3>
+          <p>
             Sign out of your account securely.
           </p>
-          <button
-            style={{
-              backgroundColor: "#6a0dad",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-            }}
-          >
+          <button className="option-button" >
             Logout
           </button>
         </div>

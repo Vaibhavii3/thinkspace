@@ -1,0 +1,118 @@
+/* General Container Styles */
+body {
+    margin: 0;
+    font-family: "Arial", sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.profile-container {
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+}
+
+.profile-name {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.profile-email {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.edit-button {
+    background-color: #6a0dad;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #8240c7;
+}
+
+.icon {
+    margin-right: 0.5rem;
+}
+
+/* Options Section */
+.profile-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Option Card */
+.profile-option-card {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.option-icon {
+    font-size: 2rem;
+    color: #6a0dad;
+}
+
+.profile-option-card h3 {
+    margin: 1rem 0;
+    font-size: 1.2rem;
+}
+
+.profile-option-card p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.option-button {
+    background-color: #6a0dad;
+    color: #fff;
+    border: none;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.option-button:hover {
+    background-color: #8240c7;
+}

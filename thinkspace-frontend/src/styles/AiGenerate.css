@@ -1,12 +1,16 @@
-/* body {
-    margin: 50px;
+.ai-generate-container {
+    margin: 0;
     font-family: "Poppins", sans-serif;
     background: linear-gradient(180deg, #38195a, #d05de7, #f8b160);
     color: #fff;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     height: 100vh;
-} */
+    padding-top: 2rem;
+}
+
+
   
 .app-container {
     width: 100%;
