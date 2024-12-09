@@ -1,5 +1,6 @@
 const express = require("express");
 const { generateAIContent } = require("../controllers/aiController");
+const { saveContent } = require("../controllers/contentController");
 const router = express.Router();
 
 // const validatePrompt = (req, res, next) => {
@@ -15,5 +16,6 @@ const router = express.Router();
 // router.post("/generate-ai", validatePrompt, generateAIContent);
 
 router.post("/generate-ai", generateAIContent);
+router.post("/save-content", saveContent);
 
 module.exports = router;

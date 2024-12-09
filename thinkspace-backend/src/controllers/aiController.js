@@ -9,8 +9,6 @@ const generateAIContent = async (req, res) => {
         return res.status(400).json({ error: "Prompt is required" });
     }
 
-    
-
     // if (!apiUrl || !apiKey) {
     //     return res.status(500).json({ error: "API URL or API Key is missing in environment variables." });
     // }
@@ -54,6 +52,11 @@ const generateAIContent = async (req, res) => {
         // const content = new Content({ inputText: prompt, generatedText: generatedContent });
         // await content.save();
 
+        // const savedContent = await generatedContent.create({
+        //     prompt,
+        //     content: generatedContent,
+        // });
+
         res.status(200).json({ result: generatedContent });
 
     } catch (error) {
@@ -66,3 +69,5 @@ const generateAIContent = async (req, res) => {
 };
 
 module.exports = { generateAIContent };
+
+
