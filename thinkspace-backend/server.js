@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const noteRoutes = require("./src/routes/noteRoutes");
 const aiRoutes = require("./src/routes/aiRoutes");
+const quotesRoutes = require('./src/routes/quotes');
 
 const connectDB = require("../thinkspace-backend/src/config/db");
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 // Routes    
 app.use("/api/v1/notes", noteRoutes);
 app.use("/api", aiRoutes);
+app.use("/api/quotes", quotesRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });

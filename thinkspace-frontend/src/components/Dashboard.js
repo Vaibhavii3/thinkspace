@@ -9,18 +9,20 @@ const Dashboard = () => {
   const [quote, setQuote] = useState("");
   const [notes, setNotes] = useState([]);
   
-
-  const quotes = [
-    "The best way to predict the future is to create it.",
-    "Dream big. Start small. Act now.",
-    "Success is the sum of small efforts, repeated daily.",
-    "Your limitation—it’s only your imagination.",
-  ];
-
-    // Randomize quote
     useEffect(() => {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      setQuote(quotes[randomIndex]);
+      const fetchQuote = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/quotes');
+          const data = await response.json();
+          const randomIndex = Math.floor(Math.random() * data.length);
+          setQuote(data[randomIndex].text);
+          // setLoading(false);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+  
+      fetchQuote();
     }, []);
 
     useEffect(() => {

@@ -33,7 +33,7 @@ const SavedNotes = () => {
     const fetchAiNotes = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/save-content`);
-            setNotes(response.data.notes || []);
+            setAiNotes(response.data.notes || []);
         } catch (error) {
             console.error("Error fetching AI notes:", error);
         }
@@ -162,7 +162,7 @@ const SavedNotes = () => {
     </div>
   )}
 
-{view === "ai" && (
+{/* {view === "ai" && (
         <div className="notes-grid">
           {aiNotes.map((note) => (
             <div key={note._id} className="note-box">
@@ -179,7 +179,7 @@ const SavedNotes = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
