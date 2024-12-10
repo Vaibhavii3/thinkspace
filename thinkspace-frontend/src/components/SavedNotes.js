@@ -29,34 +29,57 @@ const SavedNotes = () => {
 
 
   // fetch ai-gen notes
-  useEffect(() => {
-    const fetchAiNotes = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/save-content`);
-            setAiNotes(response.data.notes || []);
-        } catch (error) {
-            console.error("Error fetching AI notes:", error);
-        }
-    };
+//   useEffect(() => {
+//     const fetchAiNotes = async () => {
+//         try {
+//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/save-content`);
+//             setAiNotes(response.data.notes || []);
+//         } catch (error) {
+//             console.error("Error fetching AI notes:", error);
+//         }
+//     };
 
-    fetchAiNotes();
-}, []);
+//     fetchAiNotes();
+// }, []);
 
   // deletion for normal note
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/v1/notes/${id}`, {
-        method: "DELETE",
-      });
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/api/v1/notes/${id}`, {
+  //       method: "DELETE",
+  //     });
 
-    if (response.ok) {
-      alert("Note deleted successfully");
-    } else {
-      alert("Failed to delete the note");
+  //   if (response.ok) {
+  //     alert("Note deleted successfully");
+  //   } else {
+  //     alert("Failed to delete the note");
+  //   }
+  // } catch (error) {
+  //   console.error("Error deleting the note:", error);
+  // }
+  // };
+
+  const handleDelete = async (id, type = "normal") => {
+    const url = type === "ai" 
+      ? `${process.env.REACT_APP_API_URL}/delete-ai-note/${id}` 
+      : `http://localhost:5000/api/v1/notes/${id}`;
+
+    try {
+      const response = await fetch(url, { method: "DELETE" });
+
+      if (response.ok) {
+        alert("Note deleted successfully");
+        if (type === "ai") {
+          setAiNotes(aiNotes.filter(note => note._id !== id));
+        } else {
+          setNotes(notes.filter(note => note._id !== id));
+        }
+      } else {
+        alert("Failed to delete the note");
+      }
+    } catch (error) {
+      console.error("Error deleting the note:", error);
     }
-  } catch (error) {
-    console.error("Error deleting the note:", error);
-  }
   };
 
   //normal 
@@ -111,18 +134,21 @@ const SavedNotes = () => {
 
     {/* Toggle Buttons */}
     <div className="toggle-buttons">
+
         <button
           className={`toggle-button ${view === "normal" ? "active" : ""}`}
           onClick={() => setView("normal")}
         >
           Normal Notes
         </button>
+
         <button
           className={`toggle-button ${view === "ai" ? "active" : ""}`}
           onClick={() => setView("ai")}
         >
           AI-Generated Notes
         </button>
+
       </div>
 
   {view === "normal" && (
@@ -162,24 +188,24 @@ const SavedNotes = () => {
     </div>
   )}
 
-{/* {view === "ai" && (
-        <div className="notes-grid">
-          {aiNotes.map((note) => (
-            <div key={note._id} className="note-box">
-              <h3>{note.title}</h3>
-              <p>{note.text}</p>
-              <div className="buttons">
-                <button
-                  className="delete-btn"
-                  onClick={() => handleDelete(note._id, "ai")}
-                >
-                  <FaTrash />
-                </button>
-              </div>
+    {view === "ai" && (
+            <div className="notes-grid">
+              {aiNotes.map((note) => (
+                <div key={note._id} className="note-box">
+                  <h3>{note.title}</h3>
+                  <p>{note.text}</p>
+                  <div className="buttons">
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(note._id, "ai")}
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )} */}
+          )}
     </div>
   );
 };

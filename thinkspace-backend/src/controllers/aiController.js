@@ -15,9 +15,9 @@ const generateAIContent = async (req, res) => {
         const apiUrl = process.env.URL;
         const apiKey = process.env.API_KEY;
 
-        if (!apiUrl || !apiKey) {
-            return res.status(500).json({ error: "API URL or API Key is missing in environment variables." });
-        }
+        // if (!apiUrl || !apiKey) {
+        //     return res.status(500).json({ error: "API URL or API Key is missing in environment variables." });
+        // }
 
         // Prepare the request body
         const requestBody = {
@@ -49,29 +49,30 @@ const generateAIContent = async (req, res) => {
             return res.status(500).json({ error: "No content generated. Check your prompt or API configuration." });
         }
 
+            res.status(200).json({ result: generatedContent });
         // Optionally save the content to the database
         // const content = new Content({ inputText: prompt, generatedText: generatedContent });
         // await content.save();
 
-        const savedContent = await Content.create({
-            title: prompt,
-            content: generatedContent,
-        });
+        // const savedContent = await Content.create({
+        //     title: prompt,
+        //     content: generatedContent,
+        // });
 
-        console.log("Content saved to database:", savedContent);
+        // console.log("Content saved to database:", savedContent);
 
-        res.status(200).json({
-            message: "AI content generated and saved successfully.",
-            generatedContent,
-            savedContent,
-        });
+        // res.status(200).json({
+        //     message: "AI content generated and saved successfully.",
+        //     generatedContent,
+        //     savedContent,
+        // });
 
     } catch (error) {
         console.error("Error with AI content generation:", error);
 
-        if (error.response) {
-            console.error("API Error Response:", error.response.data);
-        }
+        // if (error.response) {
+        //     console.error("API Error Response:", error.response.data);
+        // }
 
         res.status(400).json({
             error: error.response?.data?.error?.message || "Invalid request to AI API",

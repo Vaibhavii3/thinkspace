@@ -7,15 +7,14 @@ function AiGenerate() {
     const [result, setResult] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [saved, setSaved] = useState(false);
+    // const [saved, setSaved] = useState(false);
 
     const handleGenerate = async (e) => {
         e.preventDefault();
 
         setError("");
-        // setResult("");
         setResult("");
-        setSaved(false);
+        // setSaved(false);
         
         if (!prompt.trim()) {
             setResult("Please enter a valid prompt.");
@@ -24,49 +23,25 @@ function AiGenerate() {
 
         setLoading(true);
 
-
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/generate-ai`,
                 { prompt },
                 { headers: { "Content-Type": "application/json" } }
             );
 
-            setResult(response.data.result || "No content generated.");
+            console.log("API Response:", response.data);
+            setResult(response.data.result || "Default content generated.");
 
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error:", error.response);
             setResult(`Error: ${error.response?.data?.error || "Internal Server Error"}`);
         }
 
         setLoading(false);
 };
 
-
-const handleSave = async () => {
-    if (!result) {
-        alert("No content to save.");
-        return;
-    }
-
-    try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/save-content`, 
-            { 
-                title: "AI Generated Note", 
-                content: result, 
-            }, 
-            { headers: { "Content-Type": "application/json" } }
-        );
-
-        setSaved(true);
-        alert("Content saved successfully to your notes!");
-    } catch (error) {
-        console.error("Error saving content:", error);
-        alert("Failed to save content. Please try again.");
-    }
-};
-
-
 return (
+
     <div className="ai-generate-container">
 
     <div className="app-container">
@@ -74,12 +49,12 @@ return (
         <form onSubmit={handleGenerate} className="ai-form">
 
             <textarea
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter your topic or prompt here..."
-            rows="5"
-            className="prompt-input"
-            required
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="Enter your topic or prompt here..."
+                rows="5"
+                className="prompt-input"
+                required
             ></textarea>
 
             <button type="submit" className="generate-btn"  disabled={loading}>
@@ -93,9 +68,9 @@ return (
         {result && (
             <div className="result">
                 <h3 className="result-title">Generated Content:</h3>
-                <button onClick={handleSave} disabled={saved}>
+                {/* <button onClick={handleSave} disabled={saved}>
                         {saved ? "Saved" : "Save"}
-                    </button>
+                    </button> */}
                 
                 <ul className="result-content">
                 {result.split("\n").filter(line => line.trim() !== "").map((line, index) => (
