@@ -15,10 +15,6 @@ const generateAIContent = async (req, res) => {
         const apiUrl = process.env.URL;
         const apiKey = process.env.API_KEY;
 
-        // if (!apiUrl || !apiKey) {
-        //     return res.status(500).json({ error: "API URL or API Key is missing in environment variables." });
-        // }
-
         // Prepare the request body
         const requestBody = {
             contents: [

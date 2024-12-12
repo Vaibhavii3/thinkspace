@@ -6,41 +6,118 @@ import "../styles/saveNote.css";
 const SavedNotes = () => {
   const [notes, setNotes] = useState([]);
   const [aiNotes, setAiNotes] = useState([]);
+  const [archivedNotes, setArchivedNotes] = useState([]);
+  const [pinnedNotes, setPinnedNotes] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editNote, setEditNote] = useState({ id: "", title: "", text: "" });
   const [view, setView] = useState("normal");
 
-
-  // fetch normal notes
-  useEffect(() => {
+  //fetch notes
+  useEffect (() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/v1/notes");
-        const data = await response.json();
-        console.log("Fetched Notes:", data);
-        setNotes(data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/notes`);
+            setNotes(response.data.notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
       }
     };
-
     fetchNotes();
   }, []);
 
+  //fetch archive notes
+  useEffect (() => {
+    const fetchArchivedNotes = async () => {
+      try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/notes/archived`);
+            setArchivedNotes(response.data.notes || []);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+    fetchArchivedNotes();
+  }, []);
 
   // fetch ai-gen notes
-//   useEffect(() => {
-//     const fetchAiNotes = async () => {
-//         try {
-//             const response = await axios.get(`${process.env.REACT_APP_API_URL}/save-content`);
-//             setAiNotes(response.data.notes || []);
-//         } catch (error) {
-//             console.error("Error fetching AI notes:", error);
-//         }
-//     };
+  useEffect(() => {
+    const fetchAiNotes = async () => {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/ai-notes`);
+            setAiNotes(response.data.notes || []);
+        } catch (error) {
+            console.error("Error fetching AI notes:", error);
+        }
+    };
 
-//     fetchAiNotes();
-// }, []);
+    fetchAiNotes();
+  }, []);
+
+
+  // fetch pin notes
+  useEffect (() => {
+    const fetchPinnedNotes = async () => {
+      try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/notes/pinned`);
+            setPinnedNotes(response.data.notes || []);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+    fetchPinnedNotes();
+  }, []);
+
+
+
+    // archive note 2
+    const handleArchive = async (noteId) => {
+
+      try {
+        // const response = await axios.post(`http://localhost:5000/api/v1/notes/archived`, { id: noteId });
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/notes/archive`, { id: noteId });
+        if (response.status === 200) {
+          const updatedNote = response.data.note;
+          setNotes((prev) => prev.filter(note => note.id !== noteId));
+          setArchivedNotes((prev) => [...prev, updatedNote]);
+        }
+      } catch (error) {
+        console.error("Error archiving note:", error);
+      }
+    };
+
+
+   // Pin a note 1
+  //   const handlePin = async (id) => {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/v1/notes/pin`, {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ id }),
+  //       });
+
+  //       if (response.ok) {
+  //         setNotes(notes.filter((note) => note._id !== id)); 
+  //         alert("Note pinned successfully");
+  //       } else {
+  //         alert("Failed to pin the note");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error pinning the note:", error);
+  //     }
+  // };
+
+  //pin note 2 
+  const handlePin = async(noteId) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/notes/pin`, { id: noteId });
+      if (response.status === 200) {
+        const updatedNote = response.data.note;
+        setNotes((prev) => prev.filter(note => note.id !== noteId));
+        setPinnedNotes((prev) => [...prev, updatedNote]);
+      }
+    } catch (error) {
+      console.error("Error pinning note:", error);
+    }
+  };
 
   // deletion for normal note
   // const handleDelete = async (id) => {
@@ -70,9 +147,9 @@ const SavedNotes = () => {
       if (response.ok) {
         alert("Note deleted successfully");
         if (type === "ai") {
-          setAiNotes(aiNotes.filter(note => note._id !== id));
+          setAiNotes(aiNotes.filter((note) => note._id !== id));
         } else {
-          setNotes(notes.filter(note => note._id !== id));
+          setNotes(notes.filter((note) => note._id !== id));
         }
       } else {
         alert("Failed to delete the note");
@@ -84,7 +161,7 @@ const SavedNotes = () => {
 
   //normal 
   const handleEditClick = (note) => {
-    setEditNote({ id: note._id, title: note.title, text: note.text });
+    setEditNote({ id: note.id, title: note.title, text: note.text });
     setIsEditing(true);
   };
 
@@ -103,6 +180,8 @@ const SavedNotes = () => {
       });
 
     if (response.ok) {
+      const updatedNote = await response.json();
+      setNotes(notes.map((notes) => (notes._id === editNote.id ? updatedNote : notes)));
       alert("Note updated successfully");
       setIsEditing(false);
     } else {
@@ -149,6 +228,16 @@ const SavedNotes = () => {
           AI-Generated Notes
         </button>
 
+        <button 
+          className={`toggle-button ${view === "archived" ? "active" : ""}`} onClick={() => setView("archived")}>
+            archived Notes 
+        </button>
+
+        <button 
+          className={`toggle-button ${view === "pinned" ? "active" : ""}`} onClick={() => setView("pinned")}>
+            Pinned Notes 
+        </button>
+
       </div>
 
   {view === "normal" && (
@@ -173,13 +262,20 @@ const SavedNotes = () => {
         </div>
       ) : (
         <div className="notes-grid">
-          {notes.map((note) => (
+          {
+          notes.length === 0 ? <p> No saved notes available. </p> :
+          notes.map((note) => (
             <div key={note._id} className="note-box">
                 <h3>{note.title}</h3>
                 <p>{note.text}</p>
                 <div className="buttons">
-                  <button className="edit-btn" onClick={() => handleEditClick(note)}><FaEdit /></button>
-                  <button className="delete-btn" onClick={() => handleDelete(note._id)}><FaTrash /></button>
+                  <button className="edit-btn" onClick={() => handleEditClick(notes)}><FaEdit /></button>
+
+                  <button className="pin-btn" onClick={() => handlePin(notes.id)}> <FaThumbtack /></button>
+
+                  <button className="archve-btn" onClick={() => handleArchive(notes.id)}> <FaArchive /></button>
+
+                  <button className="delete-btn" onClick={() => handleDelete(notes._id)}><FaTrash /></button>
               </div>
             </div>
           ))}
@@ -190,10 +286,12 @@ const SavedNotes = () => {
 
     {view === "ai" && (
             <div className="notes-grid">
-              {aiNotes.map((note) => (
-                <div key={note._id} className="note-box">
+              {
+              aiNotes.length === 0 ? <p> No Ai Notes available. </p> :
+              aiNotes.map((note) => (
+                <div key={note.id} className="note-box">
                   <h3>{note.title}</h3>
-                  <p>{note.text}</p>
+                  <p>{note.content}</p>
                   <div className="buttons">
                     <button
                       className="delete-btn"
@@ -205,7 +303,37 @@ const SavedNotes = () => {
                 </div>
               ))}
             </div>
-          )}
+    )}
+
+    {view === "archived" && (
+      <div className="notes-grid">
+        {
+        archivedNotes.length === 0 ? <p> No archived notes available. </p> :
+        archivedNotes.map((note) => (
+          <div key={note._id} className="note-box">
+            <h3>{note.title}</h3>
+            <p>{note.text}</p>
+            {/* <button className="archve-btn" onClick={() => handleArchive(note._id)}><FaArchive /></button> */}
+            </div>
+        ))}
+      </div>
+    )}
+
+    {view === "pinned" && (
+      <div className="notes-grid">
+        {
+        pinnedNotes.length === 0 ? <p> No pinned notes available. </p> :
+        pinnedNotes.map((note) => (
+          <div key={note._id} className="note-box">
+            <h3>{note.title}</h3>
+            <p>{note.text}</p>
+            {/* Buttons */}
+          </div>
+        ))}
+      </div>
+    )}
+
+
     </div>
   );
 };

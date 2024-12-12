@@ -10,8 +10,6 @@ const validatePrompt = (req, res, next) => {
     next();
 };
 
-
-
 // Route for AI content generation
 router.post("/generate-ai", validatePrompt, generateAIContent);
 
