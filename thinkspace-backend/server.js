@@ -8,6 +8,7 @@ const noteRoutes = require("./src/routes/noteRoutes");
 const aiRoutes = require("./src/routes/aiRoutes");
 const quotesRoutes = require('./src/routes/quotes');
 const aiNotesRoutes = require('./src/routes/aiNotes');
+const authRoutes = require("./src/routes/auth");
 
 const connectDB = require("../thinkspace-backend/src/config/db");
 
@@ -26,6 +27,8 @@ app.use("/api/v1/notes", noteRoutes);
 app.use("/api", aiRoutes);
 app.use("/api/quotes", quotesRoutes);
 app.use("/api", aiNotesRoutes);
+
+app.use("/api/auth", authRoutes);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });

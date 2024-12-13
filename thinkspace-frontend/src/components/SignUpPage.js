@@ -1,15 +1,67 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/SignUpPage.css";
 
 const SignUpPage = () => {
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      setSuccess("Registration successful! Redirecting to login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000); // Redirect after 2 seconds
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+
+
   return (
     <div className="signup-container">
       <div className="signup-form">
         <h2 className="signup-title">
           Sign Up
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label
               htmlFor="name"
@@ -21,6 +73,8 @@ const SignUpPage = () => {
               id="name"
               placeholder="Enter your full name"
               className="form-input"
+              value={formData.name}
+              onChange={handleChange}
             />
           </div>
           <div className="form-group">
@@ -35,6 +89,8 @@ const SignUpPage = () => {
               id="email"
               placeholder="Enter your email"
               className="form-input"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
           <div className="form-group">
@@ -49,6 +105,8 @@ const SignUpPage = () => {
               id="password"
               placeholder="Enter your password"
               className="form-input"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
           <button
@@ -58,6 +116,10 @@ const SignUpPage = () => {
             Sign Up
           </button>
         </form>
+
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
+
         <p className="login-text">
           Already have an account?{" "}
           <Link

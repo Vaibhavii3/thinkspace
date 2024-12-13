@@ -1,26 +1,59 @@
 import React, { useState} from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
 
 const LoginPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (event) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    setError("");
+    setLoading(true);
 
-    if (!email || !password) {
-      alert("please fill out all fields.");
-      return;
-    }
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      alert("Please enter a valid email address.");
-      return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Invalid login credentials");
+      }
+
+      // Save token to localStorage/sessionStorage
+      localStorage.setItem("authToken", data.token);
+
+      // Redirect to dashboard or homepage
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
+
 
   return (
     <div className="login-container">
@@ -39,6 +72,8 @@ const LoginPage = () => {
               placeholder="Enter your email"
               aria-required="true"
               className="form-input"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
 
@@ -54,16 +89,21 @@ const LoginPage = () => {
               id="password"
               placeholder="Enter your password"
               className="form-input"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
 
           <button
             type="submit"
-            className="login-button">
-            Login
+            className="login-button"
+            disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
+        {error && <p className="error-message">{error}</p>}
+        
         <p className="signup-text">
           Don't have an account?{" "}
           <Link

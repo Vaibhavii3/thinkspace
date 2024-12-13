@@ -76,7 +76,7 @@ const SavedNotes = () => {
         const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/notes/archive`, { id: noteId });
         if (response.status === 200) {
           const updatedNote = response.data.note;
-          setNotes((prev) => prev.filter(note => note.id !== noteId));
+          setNotes((prev) => prev.filter((note) => note.id !== noteId));
           setArchivedNotes((prev) => [...prev, updatedNote]);
         }
       } catch (error) {
@@ -111,7 +111,7 @@ const SavedNotes = () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/v1/notes/pin`, { id: noteId });
       if (response.status === 200) {
         const updatedNote = response.data.note;
-        setNotes((prev) => prev.filter(note => note.id !== noteId));
+        setNotes((prev) => prev.filter((note) => note.id !== noteId));
         setPinnedNotes((prev) => [...prev, updatedNote]);
       }
     } catch (error) {
@@ -137,19 +137,20 @@ const SavedNotes = () => {
   // };
 
   const handleDelete = async (id, type = "normal") => {
-    const url = type === "ai" 
+    const url = 
+    type === "ai" 
       ? `${process.env.REACT_APP_API_URL}/delete-ai-note/${id}` 
-      : `http://localhost:5000/api/v1/notes/${id}`;
+      : `${process.env.REACT_APP_API_URL}/v1/notes/${id}`;
 
     try {
-      const response = await fetch(url, { method: "DELETE" });
+      const response = await axios.delete(url);
 
-      if (response.ok) {
+      if (response.status === 200) {
         alert("Note deleted successfully");
         if (type === "ai") {
-          setAiNotes(aiNotes.filter((note) => note._id !== id));
+          setAiNotes((prev) => prev.filter((note) => note._id !== id));
         } else {
-          setNotes(notes.filter((note) => note._id !== id));
+          setNotes((prev) => prev.filter((note) => note._id !== id));
         }
       } else {
         alert("Failed to delete the note");
@@ -168,24 +169,20 @@ const SavedNotes = () => {
   //normal
   const handleSaveEdit = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/notes/${editNote.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/notes/${editNote.id}`, 
+        {
           title: editNote.title,
           text: editNote.text,
-        }),
-      });
+        }
+      );
 
-    if (response.ok) {
-      const updatedNote = await response.json();
-      setNotes(notes.map((notes) => (notes._id === editNote.id ? updatedNote : notes)));
+    if (response.status === 200) {
+      const updatedNote = response.data;
+      setNotes((prev) => 
+        prev.map((note) => (note._id === editNote.id ? updatedNote : note))
+      );
       alert("Note updated successfully");
       setIsEditing(false);
-    } else {
-      alert("Failed to update the note");
     }
   } catch (error) {
     console.error("Error updating the note:", error);
