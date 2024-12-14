@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-// require("dotenv").config();
-
 
 
 // Signup Controller
@@ -16,14 +14,14 @@ const signup = async (req, res) => {
 
 
         // Create and save user
-        const user = new User({ name, email, password });
+        const user = new User({ name, email, password: hashedPassword });
         await user.save();
 
         //Generate JWT
-        // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        // res.status(201).json({ token, user: { id: user._id, name, email } });
-        res.status(201).json({ message: "User created successfully" });
+        res.status(201).json({ message: "User created successfully", token, user: { id: user._id, name, email } });
+
     } catch (error) {
         res.status(500).json({ message: "Something went wrong", error: error.message });
     }
