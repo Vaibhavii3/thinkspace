@@ -99,7 +99,7 @@ const Dashboard = () => {
         <h1 style={{ margin: 0 }}>ThinkSpace</h1>
         <div>
           <Link
-            to="/pinned"
+            to="/daily-task"
             style={{
               color: "#fff",
               margin: "0 1rem",
@@ -107,7 +107,7 @@ const Dashboard = () => {
               fontWeight: "bold",
             }}
           >
-            Pinned Notes
+            Daily-task
           </Link>
           <Link
             to="/archived"

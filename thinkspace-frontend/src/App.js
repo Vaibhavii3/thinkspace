@@ -9,6 +9,7 @@ import ProfilePage from './components/ProfilePage';
 import ThemeCustomization from './components/ThemeCustomization';
 import SavedNotes from './components/SavedNotes';
 import AiGenerate from './components/AiGenerate';
+import DailyTask from './components/DailyTask';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="/ThemeCustomization" element={<ThemeCustomization />} />
           <Route path="/saved-notes" element={<SavedNotes />} />
           <Route path="/AiGen" element={<AiGenerate />} />
+          <Route path="/daily-task" element={<DailyTask />} />
         </Routes>
       </Router>
     );

@@ -1,0 +1,60 @@
+/* Container */
+.task-form-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Input Fields */
+.task-form-input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+/* Time Input */
+.time-input {
+    width: 100%;
+}
+
+/* Submit Button */
+.submit-btn {
+    background-color: #3182ce; /* blue color */
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+    background-color: #2b6cb0;
+}
+
+/* Flexbox for better alignment */
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .flex-container {
+        flex-direction: row;
+    }
+
+    .task-form-input {
+        flex: 1;
+    }
+
+    .time-input {
+        flex: 0.5;
+    }
+}
