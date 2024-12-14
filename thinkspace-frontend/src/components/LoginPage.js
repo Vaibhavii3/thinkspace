@@ -1,5 +1,6 @@
 import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import "../styles/LoginPage.css";
 
 const LoginPage = () => {
@@ -28,27 +29,19 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Invalid login credentials");
-      }
-
+  
       // Save token to localStorage/sessionStorage
-      localStorage.setItem("authToken", data.token);
+      localStorage.setItem("authToken", response.data.token);
 
       // Redirect to dashboard or homepage
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || "Invalid login credentials");
     } finally {
       setLoading(false);
     }
@@ -61,11 +54,13 @@ const LoginPage = () => {
         <h2 className="login-title"> Login </h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
+
             <label
               htmlFor="email"
               className="form-label">
               Email
             </label>
+
             <input
               type="email"
               id="email"
@@ -75,15 +70,18 @@ const LoginPage = () => {
               value={formData.email}
               onChange={handleChange}
             />
+
           </div>
 
           <div className="form-group">
+
             <label
               htmlFor="password"
               className="form-label"
             >
               Password
             </label>
+
             <input
               type="password"
               id="password"
@@ -92,6 +90,7 @@ const LoginPage = () => {
               value={formData.password}
               onChange={handleChange}
             />
+            
           </div>
 
           <button

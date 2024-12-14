@@ -1,5 +1,6 @@
 import React, { useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import "../styles/SignUpPage.css";
 
 const SignUpPage = () => {
@@ -29,27 +30,33 @@ const SignUpPage = () => {
     setError("");
     setSuccess("");
 
+    // Basic validation for empty fields
+    if (!formData.name || !formData.email || !formData.password) {
+      setError("All fields are required.");
+      return;
+    }
+
+
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+      
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
+        setSuccess("Registration successful! Redirecting to login...");
+        
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000); // Redirect after 2 seconds
       }
 
-      setSuccess("Registration successful! Redirecting to login...");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000); // Redirect after 2 seconds
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
+      setError(errorMessage);
     }
   };
 
