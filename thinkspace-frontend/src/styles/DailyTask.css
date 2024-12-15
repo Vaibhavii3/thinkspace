@@ -1,93 +1,101 @@
-/* Main Container */
-.daily-task-container {
-    background-color: #f7fafc; /* light gray background */
-    min-height: 100vh;
-    padding: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+/* DailyTaskPage.css */
+.daily-task-page {
+    font-family: Arial, sans-serif;
+    padding: 20px;
 }
 
-.daily-task-card {
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    width: 100%;
-    max-width: 800px;
-}
-
-/* Title */
-.daily-task-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2d3748; /* dark gray */
+.head {
     text-align: center;
-    margin-bottom: 1.5rem;
+    color: #333;
 }
 
-/* Section Divider */
-.section-divider {
-    border-bottom: 1px solid #e2e8f0;
-    margin-bottom: 1.5rem;
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
 }
 
-/* Task Form */
-.task-form-container {
-    margin-bottom: 2rem;
+.task-form input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-/* Task List */
-.task-list-header {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #4a5568; /* dark gray */
-    margin-top: 2rem;
+.form-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-controls label {
+    font-size: 14px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.current-day-tasks {
+    margin-top: 20px;
 }
 
 .task-item {
-    padding: 1rem;
-    background-color: #edf2f7; /* light gray background */
-    border-radius: 0.375rem;
-    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-.task-item.complete {
-    background-color: #c6f6d5; /* light green */
+.streak-progress {
+    margin-top: 30px;
 }
 
-.task-actions {
-    display: flex;
-    gap: 1rem;
+.streak-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 30px);
+    gap: 5px;
+    margin-top: 20px;
 }
 
-/* Heatmap Section */
-.heatmap-container {
-    background-color: #f9fafb;
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+.streak-day {
+    width: 30px;
+    height: 30px;
+    background-color: lightgray;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 640px) {
-    .daily-task-container {
-        padding: 1rem;
-    }
-
-    .daily-task-card {
-        padding: 1rem;
-    }
-
-    .daily-task-title {
-        font-size: 1.5rem;
-    }
-
-    .task-list-header {
-        font-size: 1.25rem;
-    }
+.streak-day.completed {
+    background-color: #4caf50;
 }
+
+/* DailyTask.css */
+.color-scale-0 {
+    background-color: #f1f1f1; /* Light gray for no completion */
+}
+
+.color-scale-1 {
+    background-color: #d3ffd3; /* Light green for 1 task completed */
+}
+
+.color-scale-2 {
+    background-color: #8cff8c; /* Green for 2 tasks completed */
+}
+
+/* Add more color scales as needed */
+

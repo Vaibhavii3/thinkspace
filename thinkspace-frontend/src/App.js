@@ -39,7 +39,7 @@ function App() {
           <Route path="/ThemeCustomization" element={<ThemeCustomization />} />
           <Route path="/saved-notes" element={<SavedNotes />} />
           <Route path="/AiGen" element={<AiGenerate />} />
-          <Route path="/daily-task" element={<DailyTask />} />
+          <Route path="/DailyTask" element={<DailyTask />} />
         </Routes>
       </Router>
     );
