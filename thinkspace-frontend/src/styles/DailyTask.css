@@ -2,18 +2,24 @@
 .daily-task-page {
     font-family: Arial, sans-serif;
     padding: 20px;
+    background-color: #dddada;
 }
 
 .head {
     text-align: center;
-    color: #333;
+    color: #272525;
 }
 
 .task-form {
     display: flex;
     flex-direction: column;
+    background-color: #494848;
     gap: 10px;
     margin: 20px 0;
+    padding: 10px;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .task-form input[type="text"] {
@@ -30,6 +36,7 @@
 }
 
 .form-controls label {
+    color: #fff;
     font-size: 14px;
 }
 
@@ -49,6 +56,7 @@ button:hover {
 
 .current-day-tasks {
     margin-top: 20px;
+    
 }
 
 .task-item {
@@ -63,6 +71,8 @@ button:hover {
 
 .streak-progress {
     margin-top: 30px;
+    background-color: #464646;
+    padding: 10px;
 }
 
 .streak-grid {
