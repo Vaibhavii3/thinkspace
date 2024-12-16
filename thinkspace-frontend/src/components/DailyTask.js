@@ -38,7 +38,7 @@ function DailyTask() {
 
 
     return (
-        <div className="daily-task-page">
+        <div className="dailytaskpage">
             <h1 className="head">Daily Task</h1>
 
             {/* Task Form */}
@@ -64,43 +64,52 @@ function DailyTask() {
                 </div>
             </div>
 
-            {/* Calendar */}
-            <Calendar onChange={setDate} value={date} />
+            <div className="both-container">
+                {/* Calendar */}
+                <div className="calendar-container">
+                    <Calendar 
+                        onChange={setDate} 
+                        value={date} 
+                        className="custom-calendar" />
+                </div>
 
             {/* Current Day Tasks */}
-            <div className="current-day-tasks">
-                <h2>Tasks for {date.toDateString()}</h2>
-                {tasks
-                    .filter((task) => task.date.toDateString() === date.toDateString())
-                    .map((task, index) => (
-                        <div key={index} className="task-item">
-                            <span>{task.description}</span>
-                            <button onClick={() => handleTaskCompletion(task.id)}>Complete</button>
-                            <button>Edit</button>
-                            <button>Delete</button>
-                        </div>
-                    ))}
+                <div className="current-day-tasks">
+                    <h2>Tasks for {date.toDateString()}</h2>
+                    {tasks
+                        .filter((task) => task.date.toDateString() === date.toDateString())
+                        .map((task, index) => (
+                            <div key={index} className="task-item">
+                                <span>{task.description}</span>
+                                <button onClick={() => handleTaskCompletion(task.id)}>Complete</button>
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </div>
+                        ))}
+                </div>
             </div>
 
             {/* Streak Progress */}
             <div className="streak-progress">
                 <h2>Streak Progress</h2>
 
-                <Heatmap
-                    startDate={new Date("2023-12-01")}
-                    endDate={new Date()}
-                    values={getTaskDataForHeatmap()}
-                    classForValue={(value) => {
-                        if (!value || value.count === undefined || value.count === null) {
-                            return "color-scale-0"; // Default color for null/undefined count
-                        }
-                        return `color-scale-${value.count}`; // Use count to determine the class
-                    }}
-                
-                    showWeekdayLabels={true}
-                    showMonthLabels={true}
-                />
-
+                <div className="heatmap">
+                        
+                    <Heatmap
+                        startDate={new Date("2023-12-01")}
+                        endDate={new Date()}
+                        values={getTaskDataForHeatmap()}
+                        classForValue={(value) => {
+                            if (!value || value.count === undefined) {
+                                return "color-scale-0"; // Default color for null/undefined count
+                            }
+                            return `color-scale-${Math.min(value.count, 6)}`; // Use count to determine the class
+                        }}
+                    
+                        showWeekdayLabels={true}
+                        showMonthLabels={true}
+                    />
+                </div>
             </div>
         </div>
     );

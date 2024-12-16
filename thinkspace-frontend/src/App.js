@@ -1,5 +1,4 @@
-import './App.css';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
@@ -13,19 +12,19 @@ import DailyTask from './components/DailyTask';
 
 function App() {
 
-  const defaultColors = {
-    primary: "#007bff",
-    secondary: "#6c757d",
-  }
+  // const defaultColors = {
+  //   primary: "#007bff",
+  //   secondary: "#6c757d",
+  // }
 
-  const [themeColors, setThemeColors] = useState(
-    JSON.parse(localStorage.getItem("themeColors")) || defaultColors
-  );
+  // const [themeColors, setThemeColors] = useState(
+  //   JSON.parse(localStorage.getItem("themeColors")) || defaultColors
+  // );
 
-  useEffect(() => {
-    document.documentElement.style.setProperty("--primary-color", themeColors.primary);
-    document.documentElement.style.setProperty("--secondary-color", themeColors.secondary);
-  }, [themeColors]);
+  // useEffect(() => {
+  //   document.documentElement.style.setProperty("--primary-color", themeColors.primary);
+  //   document.documentElement.style.setProperty("--secondary-color", themeColors.secondary);
+  // }, [themeColors]);
 
     return (
       
