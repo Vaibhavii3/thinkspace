@@ -38,14 +38,13 @@ function DailyTask() {
         fetchTasks();
     }, []);
 
-
-
     const handleAddTask = async () => {
         if (newTask.trim()) {
             const taskData = {
                 description: newTask,
                 date: date.toISOString(),
                 notify: notify,
+                completed: false,
             };
     
             try {
@@ -78,7 +77,9 @@ function DailyTask() {
             // });
 
             const updatedTasks = tasks.map((task) =>
-                task.id === taskId || task._id === taskId ? res.data : task
+                task.id === taskId || task._id === taskId ? 
+                { ...task, completed: true, date: new Date(task.date).toISOString() }
+                : task
             );    
         
             // Update local state
@@ -111,13 +112,15 @@ function DailyTask() {
     const handleEditTask = async (taskId, updatedDescription) => {
         try {
             // Update on server
-            const res = await axios.put(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`, {
+            await axios.put(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`, {
                 description: updatedDescription,
             });
     
             // Update local state
             const updatedTasks = tasks.map((task) =>
-                task.id === taskId ? { ...task, description: updatedDescription } : task
+                task.id === taskId || task._id 
+                ? { ...task, description: updatedDescription } 
+                : task
             );
     
             setTasks(updatedTasks);

@@ -38,7 +38,8 @@ const updateTask = async (req, res) => {
         if (req.body.description !== undefined) updates.description = req.body.description;
         if (req.body.completed !== undefined) updates.completed = req.body.completed;
 
-        const task = await Task.findByIdAndUpdate(req.params.id, updates, { new: true });
+        // const task = await Task.findByIdAndUpdate(req.params.id, updates, { new: true });
+        const task = await Task.findByIdAndUpdate(req.params.id, updates, req.body, { new: true });
         if (!task) return res.status(404).json({ message: "Task not found" });
         res.json(task);
     } catch (error) {
