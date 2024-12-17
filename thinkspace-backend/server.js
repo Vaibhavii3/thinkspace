@@ -9,7 +9,7 @@ const aiRoutes = require("./src/routes/aiRoutes");
 const quotesRoutes = require('./src/routes/quotes');
 const aiNotesRoutes = require('./src/routes/aiNotes');
 const authRoutes = require("./src/routes/auth");
-
+const taskRoutes = require("./src/routes/taskRoutes");
 
 const connectDB = require("../thinkspace-backend/src/config/db");
 
@@ -30,6 +30,7 @@ app.use("/api/quotes", quotesRoutes);
 app.use("/api", aiNotesRoutes);
 
 app.use("/api/auth", authRoutes);
+app.use("/api", taskRoutes);
 
 
 app.use((req, res) => {
