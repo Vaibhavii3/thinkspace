@@ -1,5 +1,5 @@
 const schedule = require('node-schedule');
-const { sendNotification } = require('../services/notificationService');
+const { sendNotification } = require('../utils/notificationService');
 const Task = require('../models/Task');
 
 const scheduleNotification = (task) => {
