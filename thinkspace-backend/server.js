@@ -10,7 +10,7 @@ const quotesRoutes = require('./src/routes/quotes');
 const aiNotesRoutes = require('./src/routes/aiNotes');
 const authRoutes = require("./src/routes/auth");
 const taskRoutes = require("./src/routes/taskRoutes");
-const userRoutes = require("./src/routes/userRoutes");
+// const userRoutes = require("./src/routes/userRoutes");
 // const notificationRoutes = require("./src/routes/notificationRoutes");
 
 
@@ -34,7 +34,7 @@ app.use("/api", aiNotesRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
-app.use("/api/users", userRoutes);
+// app.use("/api/users", userRoutes);
 
 // app.use("/notifications", notificationRoutes);
 
