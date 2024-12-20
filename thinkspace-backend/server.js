@@ -10,13 +10,11 @@ const quotesRoutes = require('./src/routes/quotes');
 const aiNotesRoutes = require('./src/routes/aiNotes');
 const authRoutes = require("./src/routes/auth");
 const taskRoutes = require("./src/routes/taskRoutes");
-// const userRoutes = require("./src/routes/userRoutes");
-// const notificationRoutes = require("./src/routes/notificationRoutes");
-
 
 const connectDB = require("../thinkspace-backend/src/config/db");
 
 const app = express();
+
 const PORT = process.env.PORT || 5000;
 
 connectDB();
@@ -24,7 +22,7 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-// app.use(express.json());
+
 
 // Routes    
 app.use("/api/v1/notes", noteRoutes);
