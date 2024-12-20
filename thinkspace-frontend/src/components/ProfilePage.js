@@ -1,24 +1,44 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaEdit, FaPalette, FaLock, FaSignOutAlt } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaLock, FaSignOutAlt } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 import "../styles/ProfilePage.css";
 
+
+
 const ProfilePage = () => {
-  const user = {
-    name: "hello",
-    email: "hello@example.com",
-    profilePicture:
-      "IMG/p.jpg", 
+  const [ user, setUser ] = useState ({
+    name: "",
+    email: "",
+    profilePicture: "", 
+  });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUser({
+        name: decodedToken.name || "Name",  
+        email: decodedToken.email || "No Email Provided",  
+        profilePicture: decodedToken.profilePicture || "defaultProfilePic.jpg", 
+      });
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
 
   return (
     <div
-      className="profile-container"
-    >
+      className="profile-container">
       {/* Profile Header */}
       <div
-        className="profile-header"
-      >
+        className="profile-header">
         <div className="profile-info">
           <img
             src={user.profilePicture}
@@ -31,8 +51,7 @@ const ProfilePage = () => {
           </div>
         </div>
         <button
-          className="edit-button"
-        >
+          className="edit-button">
           <FaEdit className="icon" />
           Edit Profile
         </button>
@@ -42,23 +61,6 @@ const ProfilePage = () => {
       <div
         className="profile-options"
       >
-        {/* Theme Customization */}
-        <div
-          className="profile-option-card"
-        >
-          <FaPalette className="option-icon" />
-          <h3>Theme Customization</h3>
-          <p>
-            Personalize your experience with custom themes.
-          </p>
-          <Link to="/ThemeCustomization">
-          <button
-            className="option-button"
-          >
-            Customize Theme
-          </button>
-            </Link>
-        </div>
 
         {/* Account Settings */}
         <div
@@ -82,7 +84,7 @@ const ProfilePage = () => {
           <p>
             Sign out of your account securely.
           </p>
-          <button className="option-button" >
+          <button className="option-button" onClick={handleLogout} >
             Logout
           </button>
         </div>
