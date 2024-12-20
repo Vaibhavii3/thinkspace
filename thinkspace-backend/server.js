@@ -26,12 +26,12 @@ app.use(bodyParser.json());
 
 // Routes    
 app.use("/api/v1/notes", noteRoutes);
-app.use("/api", aiRoutes);
-app.use("/api/quotes", quotesRoutes);
-app.use("/api", aiNotesRoutes);
+app.use("/api/v1/ai", aiRoutes);
+app.use("/api/v1/quotes", quotesRoutes);
+app.use("/api/v1/ai-notes", aiNotesRoutes);
 
-app.use("/api/auth", authRoutes);
-app.use("/api", taskRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/tasks", taskRoutes);
 // app.use("/api/users", userRoutes);
 
 // app.use("/notifications", notificationRoutes);
