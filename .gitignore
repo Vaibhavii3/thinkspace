@@ -11,9 +11,14 @@
 
 # production
 /build
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/thinkspace-frontend/.env
+/thinkspace-backend/.env
 
-/thinkspace-frontend/.env 
-/thinkspace-backend/.env 
 /frontend/NOTE.txt
 
 # misc
