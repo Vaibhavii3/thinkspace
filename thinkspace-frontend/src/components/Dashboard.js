@@ -110,17 +110,6 @@ const Dashboard = () => {
             Daily Task
           </Link>
           <Link
-            to="/archived"
-            style={{
-              color: "#fff",
-              margin: "0 1rem",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
-            Archived Notes
-          </Link>
-          <Link
             to="/saved-notes"
             style={{
               color: "#fff",
@@ -129,7 +118,7 @@ const Dashboard = () => {
               fontWeight: "bold",
             }}
           >
-            Saved Notes
+            Your Notes
           </Link>
         </div>
 
