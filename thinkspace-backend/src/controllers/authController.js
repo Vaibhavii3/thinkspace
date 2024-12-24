@@ -43,8 +43,12 @@ const login = async (req, res) => {
 
         if (!user) return res.status(404).json({ message: 'User not found' });
 
+        console.log('User found:', user); // Check if the user is found correctly
+
         //compare password
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        console.log('Password comparison result:', isPasswordCorrect);
+        
         if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials' });
 
         //Generate JWT

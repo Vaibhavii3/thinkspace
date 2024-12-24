@@ -28,12 +28,16 @@ const LoginPage = () => {
     setError("");
     setLoading(true);
 
+    console.log("Login form data:", formData);
+
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
+
+      console.log("Login response:", response.data); 
   
       // Save token to localStorage/sessionStorage
       localStorage.setItem("authToken", response.data.token);
@@ -41,6 +45,7 @@ const LoginPage = () => {
       // Redirect to dashboard or homepage
       navigate("/dashboard");
     } catch (err) {
+      console.log("Error response:", err.response?.data); 
       setError(err.response?.data?.message || "Invalid login credentials");
     } finally {
       setLoading(false);
