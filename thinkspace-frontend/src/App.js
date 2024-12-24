@@ -5,7 +5,6 @@ import LoginPage from './components/LoginPage';
 import SignUpPage from './components/SignUpPage';
 import Dashboard from './components/Dashboard';
 import ProfilePage from './components/ProfilePage';
-import ThemeCustomization from './components/ThemeCustomization';
 import SavedNotes from './components/SavedNotes';
 import AiGenerate from './components/AiGenerate';
 import DailyTask from './components/DailyTask';
