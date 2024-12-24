@@ -6,8 +6,6 @@ import "../styles/saveNote.css";
 const SavedNotes = () => {
   const [notes, setNotes] = useState([]);
   const [aiNotes, setAiNotes] = useState([]);
-  // const [archivedNotes, setArchivedNotes] = useState([]);
-  // const [pinnedNotes, setPinnedNotes] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editNote, setEditNote] = useState({ id: "", title: "", text: "" });
   const [view, setView] = useState("normal");

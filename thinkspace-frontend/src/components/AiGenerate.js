@@ -43,19 +43,12 @@ function AiGenerate() {
 
     const handleSave = async () => {
 
-        // if (!result || !title) {
-        //     setSaveMessage("Title and content cannot be empty.");
-        //     return;
-        // }
-
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/save-ai-note`,
                 { title, content: result },
                 { headers: { "Content-Type": "application/json" } }
             );
-    
-                // console.log("Response from backend:", response);
 
                 if (response.status === 200 || response.status === 201) {
                     setSaveMessage("Note saved successfully!");
@@ -100,9 +93,6 @@ return (
         {result && (
             <div className="result">
                 <h3 className="result-title">Generated Content:</h3>
-                {/* <button onClick={handleSave} disabled={saved}>
-                        {saved ? "Saved" : "Save"}
-                    </button> */}
 
             <button onClick={handleSave} className="save-btn">
                 Save

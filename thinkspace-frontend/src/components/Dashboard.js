@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaSave, FaMagic } from "react-icons/fa";
-// import SavedNotes from "./SavedNotes";
 
 const Dashboard = () => {
   const [text, setText] = useState("");
@@ -16,7 +15,6 @@ const Dashboard = () => {
           const data = await response.json();
           const randomIndex = Math.floor(Math.random() * data.length);
           setQuote(data[randomIndex].text);
-          // setLoading(false);
         } catch (err) {
           console.error(err);
         }
@@ -28,7 +26,6 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchNotes = async () => {
         try {
-          // const response = await fetch("http://localhost:5000/api/v1/notes");
           const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes`);
           const data = await response.json();
           setNotes(data);
@@ -47,7 +44,6 @@ const Dashboard = () => {
 
     const handleSave = async () => {
       try {
-        // const response = await fetch(`http://localhost:5000/api/v1/notes`, {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes`, {
           method: "POST",
           headers: {
@@ -57,14 +53,14 @@ const Dashboard = () => {
         });
     
         if (response.ok) {
-          const newNote = await response.json(); // Get the newly created note
+          const newNote = await response.json(); 
           setNotes((prevNotes) => {
             if (!Array.isArray(prevNotes)) {
               prevNotes = [];
             }
             return [newNote, ...prevNotes];
           });
-          setText(""); // Clear the editor
+          setText(""); 
           setShowSaveButton(false);
         } else {
           alert("Failed to save the note.");
@@ -229,7 +225,6 @@ const Dashboard = () => {
               </button>
             </Link>
           </div>
-          {/* <SavedNotes notes={notes} /> */}
     </div>
   );
 };

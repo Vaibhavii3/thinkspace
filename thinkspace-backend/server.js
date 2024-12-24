@@ -32,9 +32,7 @@ app.use("/api/v1/ai-notes", aiNotesRoutes);
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tasks", taskRoutes);
-// app.use("/api/users", userRoutes);
 
-// app.use("/notifications", notificationRoutes);
 
 
 app.use((req, res) => {

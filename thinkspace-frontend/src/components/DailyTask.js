@@ -10,14 +10,12 @@ function DailyTask() {
     const [tasks, setTasks] = useState([]);
     const [newTask, setNewTask] = useState("");
     const [date, setDate] = useState(new Date());
-    // const [streak, setStreak] = useState(0);
 
     useEffect(() => {
         const fetchTasks = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_API_URL}/tasks`);
                 setTasks(res.data || []);
-                // setStreak(res.data.streak);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
             }
