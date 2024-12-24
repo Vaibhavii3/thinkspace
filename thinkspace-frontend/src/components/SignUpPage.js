@@ -50,11 +50,10 @@ const SignUpPage = () => {
       
     console.log("Response received: ", response.data);
 
-      if (response.data.message === "User created successfully") {
+      if (response.status === 200 && response.data.message === "User created successfully") {
         setSuccess("Registration successful! Redirecting to login...");
         // Store token if returned in response
         localStorage.setItem("authToken", response.data.token);
-
         setTimeout(() => {
           navigate("/login");
         }, 2000); // Redirect after 2 seconds

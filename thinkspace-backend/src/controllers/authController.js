@@ -12,6 +12,13 @@ const signup = async (req, res) => {
 
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
+        // Validate inputs
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 12); // 12 salt rounds
 
         // Create and save user
         const user = new User({ name, email, password: hashedPassword });
