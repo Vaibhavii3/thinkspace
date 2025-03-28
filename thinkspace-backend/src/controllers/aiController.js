@@ -17,66 +17,40 @@ const generateAIContent = async (req, res) => {
 
         // Prepare the request body
         const requestBody = {
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: prompt,
-                        },
-                    ],
-                },
-            ],
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: {
+            maxOutputTokens: 250,
+            temperature: 0.7,
+            },
         };
 
         // Make the API request using axios
-        const response = await axios.post(`${apiUrl}?key=${apiKey}`, requestBody, {
+        const response = await axios.post(`${apiUrl}?key=${apiKey}`, requestBody, { 
             headers: {
                 "Content-Type": "application/json",
-            },
+                "x-goog-api-key": apiKey,
+            }
         });
 
         console.log("Gemini AI response:", response.data);
 
         // Extract generated content
-        const generatedContent = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const generatedContent = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "No content generated";
 
         if (!generatedContent) {
             console.error("Empty response from Gemini AI.");
             return res.status(500).json({ error: "No content generated. Check your prompt or API configuration." });
         }
 
-            res.status(200).json({ result: generatedContent });
-        // Optionally save the content to the database
-        // const content = new Content({ inputText: prompt, generatedText: generatedContent });
-        // await content.save();
-
-        // const savedContent = await Content.create({
-        //     title: prompt,
-        //     content: generatedContent,
-        // });
-
-        // console.log("Content saved to database:", savedContent);
-
-        // res.status(200).json({
-        //     message: "AI content generated and saved successfully.",
-        //     generatedContent,
-        //     savedContent,
-        // });
+        res.status(200).json({ result: generatedContent });
 
     } catch (error) {
         console.error("Error with AI content generation:", error);
 
-        // if (error.response) {
-        //     console.error("API Error Response:", error.response.data);
-        // }
-
         res.status(400).json({
-            error: error.response?.data?.error?.message || "Invalid request to AI API",
-
+            error: error.response?.data?.error || "Invalid request to Gemini AI API",
         });
     }
 };
 
 module.exports = { generateAIContent };
-
-

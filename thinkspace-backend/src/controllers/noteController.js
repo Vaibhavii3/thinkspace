@@ -40,7 +40,7 @@ exports.updateNote = async (req, res) => {
         );
         if (!updatedNote) return res.status(404).json({
             message: "Note not found" });
-            res.status(200).json(updatedNote);
+            res.status(200).json({ note: updatedNote });
         } catch (error) {
             res.status(500).json({ message: "Error updating note", error });
     }

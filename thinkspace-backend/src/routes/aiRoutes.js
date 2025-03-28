@@ -11,9 +11,9 @@ const validatePrompt = (req, res, next) => {
 };
 
 // Route for AI content generation
-router.post("/generate-ai", validatePrompt, generateAIContent);
+router.post("/generate", validatePrompt, generateAIContent);
 
 // router.post("/generate-ai", generateAIContent);
-router.post("/save-content", saveContent);
+router.post("/save", saveContent);
 
 module.exports = router;

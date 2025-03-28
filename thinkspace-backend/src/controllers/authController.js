@@ -1,62 +1,127 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
+require("dotenv").config();
 
 // Signup Controller
 const signup = async (req, res) => {
-    const { name, email, password } = req.body;
-
     try {
-        const existingUser = await User.findOne({ email });
+        const { name, email, password } = req.body;
 
-        if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-        // Validate inputs
         if (!name || !email || !password) {
-            return res.status(400).json({ message: 'All fields are required' });
+            return res.status(400).json({ 
+                success: false,
+                message: 'All fields are required' 
+            });
+        }
+        
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'User already exists' 
+            });
         }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 12); // 12 salt rounds
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const user = await User.create({ 
+            name, 
+            email, 
+            password: hashedPassword 
+        });
+        
+        const token = jwt.sign(
+            { id: user._id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1h' }
+        );
 
-        // Create and save user
-        const user = new User({ name, email, password: hashedPassword });
-        await user.save();
-
-        //Generate JWT
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        res.status(201).json({ message: "User created successfully", token, user: { id: user._id, name, email } });
-
+        return res.status(200).json({ 
+            success:true,
+            message: "User created successfully", 
+            token,
+        });
+            
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong", error: error.message });
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong", 
+        });
     }
 };
 
 // Login Controller
 const login = async (req, res) => {
-    const { email, password } = req.body;
-
+    
     try {
+        const { email, password } = req.body;
+
+        if(!email || !password) {
+            return res.status(400).json({
+                success:false,
+                message:'PLease fill all the details carefully',
+            });
+        }
+
         const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found' 
+            });
+        }
 
-        if (!user) return res.status(404).json({ message: 'User not found' });
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            return res.status(403).json({
+                success: false,
+                message: "Password Incorrect"
+            });
+        }
 
-        console.log('User found:', user); // Check if the user is found correctly
+        const payload = {
+            email:user.email,
+            id:user._id,
+        };
 
-        //compare password
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        console.log('Password comparison result:', isPasswordCorrect);
         
-        if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials' });
+        const token = jwt.sign(
+            payload, 
+            process.env.JWT_SECRET, 
+            { expiresIn: "2h" }
+        );
 
-        //Generate JWT
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const userResponse = {
+            ...user.toObject(),
+            token,
+            password: undefined
+        };
+            // user = user.toObject();
+            // user.token = token;
+            // user.password = undefined;
 
-        res.status(200).json({ message: "Login successful", token });
+            // const options = {
+            //     expires: new Date( Date.now() + 3*24*60*60*1000),
+            //     httpOnly:true,
+            // }
+
+            return res.status(200).json({
+                success:true,
+                token,
+                user: userResponse,
+                message: 'User Logged in successfully',
+            });
+
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong", error: error.message });
+        console.error("Login error:", error);
+        return res.status(500).json({ 
+            success:false,
+            message: "Something went wrong", 
+            error: error.message
+        });
     }
 };
 

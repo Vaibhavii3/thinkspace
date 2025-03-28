@@ -6,6 +6,6 @@ const { getQuotes, addQuote } = require('../controllers/quotesController');
 router.get('/', getQuotes);
 
 // Route to add a new quote
-router.post('/', addQuote);
+router.post('/add', addQuote);
 
 module.exports = router;

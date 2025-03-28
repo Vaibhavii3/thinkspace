@@ -14,7 +14,7 @@ const SavedNotes = () => {
   useEffect (() => {
     const fetchNotes = async () => {
       try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/v1/notes`);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/notes`);
             setNotes(response.data.notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -41,24 +41,61 @@ const SavedNotes = () => {
 
 
   // deletion for normal note
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes/${id}`, {
-        method: "DELETE",
-      });
-      if (response.status === 200) {
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes/${id}`, {
+  //       method: "DELETE",
+  //     });
+  //     if (response.status === 200) {
+  //     setNotes((prev) => prev.filter((note) => note._id !== id));
+  //     alert("Note deleted successfully");
+  //     }
+  // } catch (error) {
+  //   console.error("Error deleting the note:", error);
+  // }
+  // };
+
+  // const handleDelete = async (id, type = "normal") => {
+  //   try {
+  //     const endpoint = type === "ai" 
+  //       ? `${process.env.REACT_APP_API_URL}/v1/ai-notes/${id}`
+  //       : `${process.env.REACT_APP_API_URL}/v1/notes/${id}`;
+  
+  //     const response = await fetch(endpoint, { method: "DELETE" });
+  
+  //     if (response.status === 200) {
+  //       if (type === "normal") {
+  //         setNotes((prev) => prev.filter((note) => note._id !== id));
+  //       } else {
+  //         setAiNotes((prev) => prev.filter((note) => note._id !== id));
+  //       }
+  //       alert("Note deleted successfully");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting the note:", error);
+  //   }
+  // };
+
+  // Fix handleDelete
+const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
+      method: "DELETE",
+    });
+    if (response.status === 200) {
       setNotes((prev) => prev.filter((note) => note._id !== id));
       alert("Note deleted successfully");
-      }
+    }
   } catch (error) {
     console.error("Error deleting the note:", error);
   }
-  };
+};
+  
 
 
   //normal 
   const handleEditClick = (note) => {
-    setEditNote({ id: note.id, title: note.title, text: note.text });
+    setEditNote({ id: note._id, title: note.title, text: note.text });
     setIsEditing(true);
   };
 
@@ -73,9 +110,9 @@ const SavedNotes = () => {
       );
 
     if (response.status === 200) {
-      const updatedNote = response.data;
+      // const updatedNote = response.data;
       setNotes((prev) => 
-        prev.map((note) => (note._id === editNote.id ? updatedNote : note))
+        prev.map((note) => (note._id === editNote.id ? response.data : note))
       );
       alert("Note updated successfully");
       setIsEditing(false);
@@ -157,7 +194,7 @@ const SavedNotes = () => {
               {
               aiNotes.length === 0 ? <p> No Ai Notes available. </p> :
               aiNotes.map((note) => (
-                <div key={note.id} className="note-box">
+                <div key={note._id} className="note-box">
                   <h3>{note.title}</h3>
                   <p>{note.content}</p>
                   <div className="buttons">

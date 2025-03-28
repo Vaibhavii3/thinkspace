@@ -11,7 +11,7 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchQuote = async () => {
         try {
-          const response = await fetch('http://localhost:5000/api/quotes');
+          const response = await fetch('http://localhost:5000/api/v1/quotes');
           const data = await response.json();
           const randomIndex = Math.floor(Math.random() * data.length);
           setQuote(data[randomIndex].text);
