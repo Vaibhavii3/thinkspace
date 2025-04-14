@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const OTP = require("../models/OTP");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const otpGenerator = require("otp-generator");
 const mailSender = require("../utils/mailSender");
@@ -65,18 +65,30 @@ const sendotp = async(req, res) => {
 // Signup Controller
 const signup = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        console.log("Incoming request:", req.body);
+        const { name, email, password, confirmPassword, otp } = req.body;
 
 
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !confirmPassword || !otp) {
+            console.log("Missing fields");
             return res.status(400).json({ 
                 success: false,
                 message: 'All fields are required' 
             });
         }
+
+        //match password
+        if(password !== confirmPassword) {
+            console.log("Password mismatch");
+            return res.status(400).json({
+                success:false,
+                message:'Password and confirmPassword value does not match, please try again',
+            });
+        }
         
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            console.log("User already exists:", email);
             return res.status(400).json({ 
                 success: false,
                 message: 'User already exists' 
@@ -89,12 +101,14 @@ const signup = async (req, res) => {
 
         //validate OTP
         if(recentOtp.length == 0) {
+            console.log("OTP not found");
             //Otp not found
             return res.status(400).json({
                 success:false,
                 message:'The OTP is not valid',
             })
         } else if(otp !== recentOtp[0].otp) {
+            console.log("OTP mismatch:", otp, "!=", recentOtp[0].otp);
             return res.status(400).json({
                 success:false,
                 message:"Invalid OTP",
@@ -103,19 +117,22 @@ const signup = async (req, res) => {
 
         
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+        console.log("Password hashed");
+
         const user = await User.create({ 
             name, 
             email, 
             password: hashedPassword,
-            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+            image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
         });
         
         const token = jwt.sign(
-            { id: user._id }, 
+            { id: user._id, email: user.email }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
+
+        console.log("User created:", user._id);
 
         return res.status(200).json({ 
             success:true,

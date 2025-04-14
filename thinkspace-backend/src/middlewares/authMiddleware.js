@@ -4,22 +4,32 @@ require("dotenv").config();
 const authMiddleware = (req, res, next) => {
     try{
 
-        const authHeader = req.header("authorization");
-        if (!authHeader) {
-            return res.status(401).json({
-                success: false,
-                message: 'Authorization header is missing'
-            });
-        }
+        // const authHeader = req.header("authorization");
+        // if (!authHeader) {
+        //     return res.status(401).json({
+        //         success: false,
+        //         message: 'Authorization header is missing'
+        //     });
+        // }
 
 
-        const token = authHeader.replace("Bearer ", "");
+        // const token = authHeader.replace("Bearer ", "");
+        // if(!token) {
+        //     return res.status(401).json({
+        //     success:false,
+        //     message:'Token Missing',
+        // });
+        // }
+
+        const token = req.cookies.token || req.body.token || req.header("Authorisation").replace("Bearer ", "");
+
+        //if token missing, then return response
         if(!token) {
             return res.status(401).json({
-            success:false,
-            message:'Token Missing',
-        });
-    }
+                success:false,
+                message:'Token is missing',
+            });
+        }
     
     try{
         const payload = jwt.verify(token, process.env.JWT_SECRET);
