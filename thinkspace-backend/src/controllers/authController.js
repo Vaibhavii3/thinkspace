@@ -1,7 +1,66 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const OTP = require("../models/OTP");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const otpGenerator = require("otp-generator");
+const mailSender = require("../utils/mailSender");
 require("dotenv").config();
+
+//send otp
+
+const sendotp = async(req, res) => {
+    try {
+        const {email} = req.body;
+
+        const checkUserPresent = await User.findOne({email});
+
+        if(checkUserPresent) {
+            return res.status(401).json({
+                success:false,
+                message:'User already registered',
+            })
+        }
+
+        //generate OTP
+        var otp = otpGenerator.generate(6, {
+            upperCaseAlphabets:false,
+            lowerCaseAlphabets:false,
+            specialChars:false,
+        });
+
+        //check unique otp or not
+        let result = await OTP.findOne({otp: otp});
+        console.log("OTP generated: ", OTP);
+        console.log("Result", result);
+        while(result) {
+            otp = otpGenerator(6, {
+                upperCaseAlphabets:false,
+                lowerCaseAlphabets:false,
+                specialChars:false,
+            })
+            result = await OTP.findOne({ otp: otp});
+        }
+
+        const otpPayload = {email, otp};
+
+        const otpBody = await OTP.create(otpPayload);
+        console.log(otpBody);
+
+        res.status(200).json({
+            success:true,
+            message:'OTP Sent Successfully',
+            otp,
+        })
+    } catch(error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        })
+    }
+}
+
+
 
 // Signup Controller
 const signup = async (req, res) => {
@@ -24,13 +83,32 @@ const signup = async (req, res) => {
             });
         }
 
+        //OTP
+        const recentOtp = await OTP.find({email}).sort({createdAt: -1}).limit(1);
+        console.log(recentOtp);
+
+        //validate OTP
+        if(recentOtp.length == 0) {
+            //Otp not found
+            return res.status(400).json({
+                success:false,
+                message:'The OTP is not valid',
+            })
+        } else if(otp !== recentOtp[0].otp) {
+            return res.status(400).json({
+                success:false,
+                message:"Invalid OTP",
+            })
+        }
+
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
         const user = await User.create({ 
             name, 
             email, 
-            password: hashedPassword 
+            password: hashedPassword,
+            image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
         });
         
         const token = jwt.sign(
@@ -125,4 +203,4 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { signup, login };
+module.exports = { signup, login, sendotp };
