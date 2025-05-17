@@ -1,233 +1,266 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { FaSave, FaMagic } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSave, FaMagic, FaUser, FaSignOutAlt, FaPenNib, FaLeaf } from "react-icons/fa";
+import axios from "axios";
+import "../styles/Dashboard.css";
 
 const Dashboard = () => {
   const [text, setText] = useState("");
   const [showSaveButton, setShowSaveButton] = useState(false);
   const [quote, setQuote] = useState("");
   const [notes, setNotes] = useState([]);
+  const [user, setUser] = useState({
+    name: "User",
+    profilePicture: null,
+  });
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const navigate = useNavigate();
   
-    useEffect(() => {
-      const fetchQuote = async () => {
-        try {
-          const response = await fetch('http://localhost:5000/api/v1/quotes');
-          const data = await response.json();
-          const randomIndex = Math.floor(Math.random() * data.length);
-          setQuote(data[randomIndex].text);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-  
-      fetchQuote();
-    }, []);
-
-    useEffect(() => {
-      const fetchNotes = async () => {
-        try {
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes`);
-          const data = await response.json();
-          setNotes(data);
-        } catch (error) {
-          console.error("Error fetching notes:", error);
-        }
-      };
-    
-      fetchNotes();
-    }, []);
-    
-    const handleChange = (e) => {
-      setText(e.target.value);
-      setShowSaveButton(e.target.value.trim() !== "");
-    };
-
-    const handleSave = async () => {
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes`, {
-          method: "POST",
+        const token = localStorage.getItem("authToken");
+        
+        if (!token) {
+          // Redirect to login if no token
+          navigate("/login");
+          return;
+        }
+        
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, {
           headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ text }),
+            Authorization: `Bearer ${token}`
+          }
         });
-    
-        if (response.ok) {
-          const newNote = await response.json(); 
-          setNotes((prevNotes) => {
-            if (!Array.isArray(prevNotes)) {
-              prevNotes = [];
-            }
-            return [newNote, ...prevNotes];
+        
+        if (response.data.success) {
+          setUser({
+            name: response.data.user.name,
+            profilePicture: response.data.user.image
           });
-          setText(""); 
-          setShowSaveButton(false);
-        } else {
-          alert("Failed to save the note.");
         }
       } catch (error) {
-        console.error("Error saving the note:", error);
-        alert("An error occurred while saving the note.");
+        console.error("Error fetching user data:", error);
+        // Handle token expiration or auth error
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          localStorage.removeItem("authToken");
+          navigate("/login");
+        }
       }
     };
     
-  const user = {
-    name: "thinkspace",
-    profilePicture: "IMG/p.jpg",
+    fetchUserData();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchQuote = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/quotes`);
+        const data = await response.json();
+        const randomIndex = Math.floor(Math.random() * data.length);
+        setQuote(data[randomIndex].text);
+      } catch (err) {
+        console.error(err);
+        setQuote("Write your thoughts, they have the power to change your world.");
+      }
+    };
+
+    fetchQuote();
+  }, []);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/notes`, 
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        
+        if (response.data.success) {
+          setNotes(response.data.notes);
+        }
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+  
+    fetchNotes();
+  }, []);
+  
+  const handleChange = (e) => {
+    setText(e.target.value);
+    setShowSaveButton(e.target.value.trim() !== "");
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/notes`, 
+        { text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+  
+      if (response.data.success) {
+        setNotes((prevNotes) => {
+          if (!Array.isArray(prevNotes)) {
+            return [response.data.note];
+          }
+          return [response.data.note, ...prevNotes];
+        });
+        setText(""); 
+        setShowSaveButton(false);
+      } else {
+        alert("Failed to save the note.");
+      }
+    } catch (error) {
+      console.error("Error saving the note:", error);
+      // Handle token expiration or auth error
+      if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+        localStorage.removeItem("authToken");
+        navigate("/login");
+      } else {
+        alert("An error occurred while saving the note.");
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
+
+  const toggleProfileMenu = () => {
+    setShowProfileMenu(!showProfileMenu);
   };
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif" }}>
-      {/* Navigation Bar */}
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "1rem",
-          background: "#6a0dad",
-          color: "#fff",
-          border: "2em",
-          borderRadius: "3%",
-          boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-        }}
-      >
-        <h1 style={{ margin: 0 }}>ThinkSpace</h1>
-        <div>
-          <Link
-            to="/DailyTask"
-            style={{
-              color: "#fff",
-              margin: "0 1rem",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
+    <div className="dashboard-container">
+      {/* Header */}
+      <header className="dashboard-header">
+        <div className="logo">
+          <FaLeaf className="logo-icon" />
+          <h1>ThinkSpace</h1>
+        </div>
+        
+        <nav className="main-nav">
+          <Link to="/dashboard" className="nav-link active">
+            <FaPenNib className="nav-icon" />
+            <span>Write</span>
+          </Link>
+          <Link to="/DailyTask" className="nav-link">
             Daily Task
           </Link>
-          <Link
-            to="/saved-notes"
-            style={{
-              color: "#fff",
-              margin: "0 1rem",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
-          >
+          <Link to="/saved-notes" className="nav-link">
             Your Notes
+          </Link>
+        </nav>
+
+        <div className="profile-section">
+          <div className="profile-wrapper" onClick={toggleProfileMenu}>
+            {user.profilePicture ? (
+              <img
+                src={user.profilePicture}
+                alt="Profile"
+                className="profile-picture"
+              />
+            ) : (
+              <div className="profile-picture-placeholder">
+                {user.name.charAt(0).toUpperCase()}
+              </div>
+            )}
+            <span className="username">{user.name}</span>
+          </div>
+          
+          {showProfileMenu && (
+            <div className="profile-dropdown">
+              <Link to="/ProfilePage" className="dropdown-item">
+                <FaUser className="dropdown-icon" />
+                Profile
+              </Link>
+              <button className="dropdown-item logout-button" onClick={handleLogout}>
+                <FaSignOutAlt className="dropdown-icon" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
+
+      <main className="dashboard-main">
+        {/* Quote section */}
+        <div className="quote-section">
+          <h3>Today's Inspiration</h3>
+          <p className="quote-text">"{quote}"</p>
+          <div className="quote-divider"></div>
+        </div>
+
+        {/* Text Editor */}
+        <div className="editor-section">
+          <div className="editor-container">
+            <textarea
+              placeholder="Start writing here..."
+              value={text}
+              onChange={handleChange}
+              className="text-editor"
+            />
+
+            {/* Save Button */}
+            {showSaveButton && (
+              <button
+                onClick={handleSave}
+                className="save-button"
+              >
+                <FaSave />
+                <span>Save</span>
+              </button>
+            )}
+          </div>
+
+          {/* AI Generation Button */}
+          <Link to="/AiGen" className="ai-button">
+            <FaMagic />
+            <span>AI Generate</span>
           </Link>
         </div>
 
-        <div>
-        <Link to="/ProfilePage">
-          <img
-            src={user.profilePicture}
-            alt="Profile"
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              cursor: "pointer",
-              border: "2px solid #fff",
-            }}
-          />
-        </Link>
-      </div>
-
-      </nav>
-            {/* quote section  */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "1.5rem",
-          background: "#f4f4f4",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h3 style={{ color: "#6a0dad", marginBottom: "1rem" }}>Today's Inspiration</h3>
-        <p style={{ fontSize: "1.25rem", fontStyle: "italic", color: "#555" }}>"{quote}"</p>
-      </div>
-    
-
-      {/* Text Editor */}
-      <div
-        style={{
-          padding: "2rem",
-          minHeight: "calc(100vh - 100px)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          background: "#f4f4f4",
-        }}
-      >
-
-        <textarea
-          placeholder="Start writing here..."
-          value={text}
-          onChange={handleChange}
-          style={{
-            width: "100%",
-            maxWidth: "800px",
-            minHeight: "300px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "1rem",
-            fontSize: "1rem",
-            lineHeight: "1.6",
-            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-            outline: "none",
-            resize: "none",
-          }}
-        />
-
-        {/* Save Button */}
-        {showSaveButton && (
-          <button
-            onClick={handleSave}
-            style={{
-              position: "absolute",
-              top: "95px",
-              right: "20px",
-              background: "#6a0dad",
-              color: "#fff",
-              border: "none",
-              padding: "0.5rem 1rem",
-              borderRadius: "5px",
-              cursor: "pointer",
-              boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-            }}
-          >
-            <FaSave style={{ marginRight: "0.5rem" }} />
-            Save
-          </button>
-        )}
-
-        {/* AI Generation Button */}
-            <Link to="/AiGen">
-              <button
-                // onClick={() => alert("AI Generation Coming Soon!")}
-                style={{
-                  marginTop: "1rem",
-                  background: "#ff9800",
-                  color: "#fff",
-                  border: "none",
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "8px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  transition: "background 0.3s",
-                }}
-              >
-                <FaMagic style={{ marginRight: "0.5rem" }} />
-                AI Generate
-              </button>
-            </Link>
+        {/* Recent Notes Preview */}
+        {notes.length > 0 && (
+          <div className="recent-notes">
+            <h3 className="recent-notes-title">Recent Notes</h3>
+            <div className="notes-grid">
+              {notes.slice(0, 3).map((note) => (
+                <div key={note._id} className="note-card">
+                  <p>{note.text.substring(0, 100)}{note.text.length > 100 ? "..." : ""}</p>
+                  <div className="note-date">
+                    {new Date(note.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {notes.length > 3 && (
+              <Link to="/saved-notes" className="view-all-notes">
+                View all notes
+              </Link>
+            )}
           </div>
+        )}
+      </main>
     </div>
   );
 };
 
 export default Dashboard;
-

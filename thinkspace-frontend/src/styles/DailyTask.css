@@ -1,140 +1,284 @@
-/* General Styling */
 .dailytaskpage {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  /* background-color: #af6b6b; */
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
   color: #333;
-  padding: 40px;
-  /* max-width: 1200px; */
+  padding: 30px;
   margin: 0 auto;
+  min-height: 100vh;
 }
 
-/* Headings */
+/* Header Styling */
 .head {
   text-align: center;
-  color: #4a90e2;
+  color: #3a7bd5;
+  font-size: 2.5rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
 }
 
-/* Task Form */
+.head:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
+}
+
+/* Task Form Styling */
 .task-form {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  transition: transform 0.3s ease;
+}
+
+.task-form:hover {
+  transform: translateY(-3px);
 }
 
 .task-form input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
-.form-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.task-form input:focus {
+  border-color: #3a7bd5;
+  box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
+  outline: none;
 }
 
 .task-form button {
-  background-color: #4caf50;
+  background: linear-gradient(to right, #3a7bd5, #00d2ff);
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 12px 25px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .task-form button:hover {
-  background-color: #45a049;
+  background: linear-gradient(to right, #3474ca, #00b8e0);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 210, 255, 0.3);
 }
 
-/* Both Container */
+.task-form button:active {
+  transform: translateY(0);
+}
+
+/* Container Layout */
 .both-container {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
+/* Calendar and Tasks Container */
 .calendar-container,
 .current-day-tasks {
   flex: 1;
+  min-width: 300px;
   background-color: white;
-  padding: 15px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.calendar-container:hover,
+.current-day-tasks:hover {
+  transform: translateY(-3px);
+}
+
+/* Calendar Customization */
+.custom-calendar {
+  width: 100%;
+  border: none !important;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+.react-calendar__tile {
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.react-calendar__tile--active {
+  background: linear-gradient(to right, #3a7bd5, #00d2ff) !important;
+  color: white !important;
+}
+
+.react-calendar__tile--now {
+  background: rgba(58, 123, 213, 0.1) !important;
+  color: #3a7bd5 !important;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  color: #555;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  padding: 10px;
+  color: #3a7bd5;
+  font-weight: 600;
+}
+
+/* Current Day Tasks Section */
+.current-day-tasks h2 {
+  color: #3a7bd5;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f3f7;
+  padding-bottom: 10px;
 }
 
 .task-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background-color: #f9fafc;
+  border-left: 4px solid #3a7bd5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.task-item:hover {
+  background-color: #f0f5ff;
+  transform: translateX(3px);
+}
+
+.task-item span {
+  flex: 1;
+  font-size: 16px;
+  word-break: break-word;
+  padding-right: 15px;
 }
 
 .task-item button {
-  margin-left: 5px;
-  padding: 5px 10px;
-  background-color: #ff9800;
-  color: white;
+  margin-left: 8px;
+  padding: 6px 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.task-item button:first-of-type {
+  background-color: #4caf50;
+  color: white;
+}
+
+.task-item button:nth-of-type(2) {
+  background-color: #3a7bd5;
+  color: white;
+}
+
+.task-item button:last-of-type {
+  background-color: #ff5252;
+  color: white;
 }
 
 .task-item button:hover {
-  background-color: #fb8c00;
+  filter: brightness(110%);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Streak Progress */
+.task-item button:active {
+  transform: translateY(0);
+}
+
+/* Streak Progress Section */
 .streak-progress {
-  margin-top: 20px;
+  margin-top: 30px;
   background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.streak-progress:hover {
+  transform: translateY(-3px);
+}
+
+.streak-progress h2 {
+  color: #3a7bd5;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f3f7;
+  padding-bottom: 10px;
 }
 
 .heatmap {
-  margin-top: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #f9fafc;
 }
 
-/* Heatmap Color Scales */
+/* Heatmap Colors */
 .color-scale-0 {
-  fill: #ebedf0; /* Light gray for no activity */
+  fill: #ebedf0;
 }
 
 .color-scale-1 {
-  fill: #c6e48b; /* Light green */
+  fill: #c0e5ff;
 }
 
 .color-scale-2 {
-  fill: #7bc96f; /* Medium green */
+  fill: #77c2ff;
 }
 
 .color-scale-3 {
-  fill: #239a3b; /* Darker green */
+  fill: #3a9eff;
 }
 
 .color-scale-4 {
-  fill: #196127; /* Dark green */
+  fill: #0f7eff;
 }
 
 .color-scale-5 {
-  fill: #0e3e16; /* Very dark green */
+  fill: #005fd9;
 }
 
 .color-scale-6 {
-  fill: #083e0d; /* Deepest green */
+  fill: #003b88;
 }
 
-/* General Styling for Heatmap Cells */
 .react-calendar-heatmap .color-scale-0,
 .react-calendar-heatmap .color-scale-1,
 .react-calendar-heatmap .color-scale-2,
@@ -143,10 +287,46 @@
 .react-calendar-heatmap .color-scale-5,
 .react-calendar-heatmap .color-scale-6 {
   stroke: #fff;
-  stroke-width: 1px;
+  stroke-width: 1.5px;
 }
 
 .react-calendar-heatmap rect {
-  rx: 3px; /* Rounded corners */
-  ry: 3px;
+  rx: 4px;
+  ry: 4px;
+}
+
+/* Empty State Styling */
+.current-day-tasks:empty::after {
+  content: "No tasks for today. Add one!";
+  display: block;
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 30px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dailytaskpage {
+    padding: 20px 15px;
+  }
+  
+  .both-container {
+    flex-direction: column;
+  }
+  
+  .calendar-container,
+  .current-day-tasks {
+    width: 100%;
+  }
+  
+  .task-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .task-form button {
+    width: 100%;
+    justify-content: center;
+  }
 }

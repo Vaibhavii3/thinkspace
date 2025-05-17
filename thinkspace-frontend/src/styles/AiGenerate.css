@@ -11,8 +11,6 @@
     padding-bottom: 2rem;
 }
 
-
-  
 .app-container {
     width: 100%;
     max-width: 600px;
@@ -24,7 +22,7 @@
     text-align: center;
 
 }
-  
+
 .title {
     font-size: 2rem;
     font-weight: bold;

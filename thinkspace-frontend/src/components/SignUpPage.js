@@ -9,11 +9,15 @@ const SignUpPage = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
+    otp: ""
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
   const navigate = useNavigate();
 
   // Handle input changes
@@ -25,6 +29,44 @@ const SignUpPage = () => {
     }));
   };
 
+  //Request Otp
+  const handleRequestOTP = async (e) => {
+    e.preventDefault();
+    setError("");
+    setOtpLoading(true);
+
+    if (!formData.email) {
+      setError("Email is required to request OTP");
+      setOtpLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/sendotp`,
+        { email: formData.email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("OTP Response:", response.data);
+
+      if (response.data.success) {
+        setSuccess("OTP sent successfully to your email");
+        setOtpSent(true);
+      } else {
+        setError(response.data.message || "Failed too send OTP");
+      }
+    } catch (err) {
+      console.error("OTP Error:", err);
+      setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +75,14 @@ const SignUpPage = () => {
     setLoading(true);
 
     // Basic validation for empty fields
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword || !formData.otp) {
       setError("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Password do not match.");
       setLoading(false);
       return;
     }
@@ -50,7 +98,7 @@ const SignUpPage = () => {
       
     console.log("Response received: ", response.data);
 
-      if (response.status === 200 && response.data.message === "User created successfully") {
+      if (response.status === 200 && response.data.success) {
         setSuccess("Registration successful! Redirecting to login...");
         // Store token if returned in response
         localStorage.setItem("authToken", response.data.token);
@@ -58,9 +106,6 @@ const SignUpPage = () => {
           navigate("/login");
         }, 2000); // Redirect after 2 seconds
       }
-
-
-
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred. Please try again.");
     } finally {
@@ -105,6 +150,8 @@ const SignUpPage = () => {
               Email
             </label>
 
+          <div className="email-group">
+
             <input
               type="email"
               id="email"
@@ -112,9 +159,35 @@ const SignUpPage = () => {
               className="form-input"
               value={formData.email}
               onChange={handleChange}
+              disabled={otpSent}
             />
-
+            {!otpSent && (
+              <button
+                type="button"
+                onClick={handleRequestOTP}
+                className="otp-button"
+                disabled={otpLoading}>
+                  {otpLoading ? "Sending..." : "Get OTP"}
+                </button>
+            )}
+            </div>
           </div>
+
+          {otpSent && (
+            <div className="form-group">
+              <label htmlFor="otp" className="form-label">
+                OTP Verification
+              </label>
+              <input 
+                type="text"
+                id="otp"
+                placeholder="Enter the OTP sent to your email"
+                className="form-input"
+                value={formData.otp}
+                onChange={handleChange}
+              />
+            </div>
+          )}
 
           <div className="form-group">
 
@@ -136,10 +209,24 @@ const SignUpPage = () => {
 
           </div>
 
+          <div className="form-group">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+              className="form-input"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+          </div>
+
           <button
             type="submit"
             className="signup-button"
-            disabled={loading}
+            disabled={loading || !otpSent}
           >
             {loading ? "Signing Up..." : "Sign Up"}
           </button>

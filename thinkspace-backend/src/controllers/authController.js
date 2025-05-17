@@ -33,7 +33,7 @@ const sendotp = async(req, res) => {
         console.log("OTP generated: ", OTP);
         console.log("Result", result);
         while(result) {
-            otp = otpGenerator(6, {
+            otp = otpGenerator.generate(6, {
                 upperCaseAlphabets:false,
                 lowerCaseAlphabets:false,
                 specialChars:false,
