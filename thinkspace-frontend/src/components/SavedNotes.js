@@ -102,7 +102,7 @@ const handleDelete = async (id) => {
   //normal
   const handleSaveEdit = async () => {
     try {
-      const response = await axios.put(`${process.env.REACT_APP_API_URL}/v1/notes/${editNote.id}`, 
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/notes/${editNote.id}`, 
         {
           title: editNote.title,
           text: editNote.text,
@@ -127,7 +127,7 @@ const handleDelete = async (id) => {
 
   <div className="saved-notes-container">
     <div className="saved-notes-title" >
-      <h1> Saved Notes </h1>
+      <h1> Your Notes </h1>
     </div>
 
     {/* Toggle Buttons */}
@@ -153,13 +153,13 @@ const handleDelete = async (id) => {
     <div>
       {isEditing ? (
         <div className="edit-note-form">
-          <input
+          {/* <input
             type="text"
             value={editNote.title}
             onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
             placeholder="Edit Title"
             className="input"
-          />
+          /> */}
           <textarea
             value={editNote.text}
             onChange={(e) => setEditNote({ ...editNote, text: e.target.value })}
@@ -209,11 +209,9 @@ const handleDelete = async (id) => {
               ))}
             </div>
     )}
-
     </div>
   );
 };
-
 export default SavedNotes;
 
 
