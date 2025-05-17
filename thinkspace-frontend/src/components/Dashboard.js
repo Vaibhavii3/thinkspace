@@ -240,28 +240,7 @@ const Dashboard = () => {
             <span>AI Generate</span>
           </Link>
         </div>
-
-        {/* Recent Notes Preview */}
-        {notes.length > 0 && (
-          <div className="recent-notes">
-            <h3 className="recent-notes-title">Recent Notes</h3>
-            <div className="notes-grid">
-              {notes.slice(0, 3).map((note) => (
-                <div key={note._id} className="note-card">
-                  <p>{note.text.substring(0, 100)}{note.text.length > 100 ? "..." : ""}</p>
-                  <div className="note-date">
-                    {new Date(note.createdAt).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
-            </div>
-            {notes.length > 3 && (
-              <Link to="/saved-notes" className="view-all-notes">
-                View all notes
-              </Link>
-            )}
-          </div>
-        )}
+        
       </main>
     </div>
   );
