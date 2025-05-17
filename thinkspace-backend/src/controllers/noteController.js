@@ -8,7 +8,7 @@ exports.createNote = async (req, res) => {
             title, text,
         });
         const savedNote = await newNote.save();
-        res.status(201).json(savedNote);
+        res.status(201).json({ success: true, note: savedNote });
     }
     catch(error) {
         return res.status(500).json({
@@ -21,7 +21,7 @@ exports.getNotes = async (req, res) => {
     try {
         
         const notes = await Note.find();
-        res.status(200).json({ notes });
+        res.status(200).json({ success: true, notes });
     } catch (error) {
         res.status(500).json({ error: "Internal server error."});
     }
@@ -40,7 +40,7 @@ exports.updateNote = async (req, res) => {
         );
         if (!updatedNote) return res.status(404).json({
             message: "Note not found" });
-            res.status(200).json({ note: updatedNote });
+            res.status(200).json({success: true, note: updatedNote });
         } catch (error) {
             res.status(500).json({ message: "Error updating note", error });
     }

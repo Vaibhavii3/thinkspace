@@ -75,7 +75,11 @@ const Dashboard = () => {
         const token = localStorage.getItem("authToken");
         
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/notes`, 
+          `${process.env.REACT_APP_API_URL}/notes`,
+          {
+            title: text.split('\n')[0] || "Untitled Note",
+            text,
+          } ,
           {
             headers: {
               Authorization: `Bearer ${token}`
