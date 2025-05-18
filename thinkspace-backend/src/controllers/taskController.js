@@ -7,7 +7,7 @@ const addTask = async (req, res) => {
         console.log("Request body:", req.body);
         console.log("Auth user:", req.user);
         
-        const { description, date } = req.body;
+        const { description, date, time, completed = false, emailReminder = false } = req.body;
         
         // Verify user ID exists in req.user
         if (!req.user || !req.user.id) {
@@ -24,6 +24,9 @@ const addTask = async (req, res) => {
         const newTask = new Task({ 
             description, 
             date, 
+            time,
+            completed,
+            emailReminder,
             userId 
         });
         

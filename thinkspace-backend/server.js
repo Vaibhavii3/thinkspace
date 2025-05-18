@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const axios = require("axios");
 require("dotenv").config(); 
 
+require("./src/utils/scheduler.js");
+
 const noteRoutes = require("./src/routes/noteRoutes");
 const aiRoutes = require("./src/routes/aiRoutes");
 const quotesRoutes = require('./src/routes/quotes');
