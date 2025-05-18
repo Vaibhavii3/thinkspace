@@ -6,7 +6,7 @@ const authMiddleware = (req, res, next) => {
 
         const token = req.body.token || (req.header("Authorization") && req.header("Authorization").replace("Bearer ", ""));
 
-        //if token missing, then return response
+        
         if(!token) {
             return res.status(401).json({
                 success:false,
@@ -16,6 +16,7 @@ const authMiddleware = (req, res, next) => {
     
     try{
         const payload = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("JWT", payload);
         req.user = payload;
         next();
     } catch(error) {
