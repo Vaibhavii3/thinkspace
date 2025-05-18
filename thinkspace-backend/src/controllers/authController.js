@@ -46,6 +46,10 @@ const sendotp = async(req, res) => {
         const otpBody = await OTP.create(otpPayload);
         console.log(otpBody);
 
+         // Send OTP via email
+        const emailBody = `<h1>Your OTP is: ${otp}</h1>`;
+        await mailSender(email, "Your OTP for ThinkSpace", emailBody);
+
         res.status(200).json({
             success:true,
             message:'OTP Sent Successfully',

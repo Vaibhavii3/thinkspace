@@ -11,15 +11,15 @@ const mailSender = async (email, title, body) => {
         })
 
         let info = await transporter.sendMail({
-            from: 'ThinkSpace',
-            to:`${email}`,
-            subject:`${title}`,
-            html:`${body}`,
+            from: `"ThinkSpace" <${process.env.MAIL_USER}>`,
+            to: email,
+            subject: title,
+            html: body,
         })
-        console.log(info);
+        console.log("Email sent:", info);
         return info;
     } catch(error) {
-        console.log(error.message);
+        console.log("Error in mailSender:", error.message);
     }
 }
 
