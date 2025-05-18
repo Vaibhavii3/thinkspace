@@ -7,6 +7,9 @@ const {
   updateNote,
   deleteNote,
 } = require("../controllers/noteController");
+const auth = require('../middlewares/authMiddleware.js');
+
+router.use(auth);
 
 router.get("/", getNotes);
 router.post("/", createNote);

@@ -4,24 +4,7 @@ require("dotenv").config();
 const authMiddleware = (req, res, next) => {
     try{
 
-        // const authHeader = req.header("authorization");
-        // if (!authHeader) {
-        //     return res.status(401).json({
-        //         success: false,
-        //         message: 'Authorization header is missing'
-        //     });
-        // }
-
-
-        // const token = authHeader.replace("Bearer ", "");
-        // if(!token) {
-        //     return res.status(401).json({
-        //     success:false,
-        //     message:'Token Missing',
-        // });
-        // }
-
-        const token = req.cookies.token || req.body.token || req.header("Authorisation").replace("Bearer ", "");
+        const token = req.body.token || (req.header("Authorization") && req.header("Authorization").replace("Bearer ", ""));
 
         //if token missing, then return response
         if(!token) {

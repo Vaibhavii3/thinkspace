@@ -190,10 +190,13 @@ const login = async (req, res) => {
         );
 
         const userResponse = {
-            ...user.toObject(),
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            _id: user._id,
             token,
-            password: undefined
         };
+
             // user = user.toObject();
             // user.token = token;
             // user.password = undefined;

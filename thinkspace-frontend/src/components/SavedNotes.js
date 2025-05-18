@@ -14,7 +14,16 @@ const SavedNotes = () => {
   useEffect (() => {
     const fetchNotes = async () => {
       try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/notes`);
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+              console.error("No token found");
+              return;
+            }
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/notes`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
             setNotes(response.data.notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -29,7 +38,16 @@ const SavedNotes = () => {
   useEffect(() => {
     const fetchAiNotes = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/ai-notes`);
+          const token = localStorage.getItem("authToken");
+            if (!token) {
+              console.error("No token found");
+              return;
+            }
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/ai-notes`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            });
             setAiNotes(response.data.notes || []);
         } catch (error) {
             console.error("Error fetching AI notes:", error);
@@ -39,51 +57,34 @@ const SavedNotes = () => {
     fetchAiNotes();
   }, []);
 
-
-  // deletion for normal note
-  // const handleDelete = async (id) => {
-  //   try {
-  //     const response = await fetch(`${process.env.REACT_APP_API_URL}/v1/notes/${id}`, {
-  //       method: "DELETE",
-  //     });
-  //     if (response.status === 200) {
-  //     setNotes((prev) => prev.filter((note) => note._id !== id));
-  //     alert("Note deleted successfully");
-  //     }
-  // } catch (error) {
-  //   console.error("Error deleting the note:", error);
-  // }
-  // };
-
-  // const handleDelete = async (id, type = "normal") => {
-  //   try {
-  //     const endpoint = type === "ai" 
-  //       ? `${process.env.REACT_APP_API_URL}/v1/ai-notes/${id}`
-  //       : `${process.env.REACT_APP_API_URL}/v1/notes/${id}`;
-  
-  //     const response = await fetch(endpoint, { method: "DELETE" });
-  
-  //     if (response.status === 200) {
-  //       if (type === "normal") {
-  //         setNotes((prev) => prev.filter((note) => note._id !== id));
-  //       } else {
-  //         setAiNotes((prev) => prev.filter((note) => note._id !== id));
-  //       }
-  //       alert("Note deleted successfully");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting the note:", error);
-  //   }
-  // };
-
   // Fix handleDelete
-const handleDelete = async (id) => {
+const handleDelete = async (id, type = "normal") => {
   try {
+    const token = localStorage.getItem("authToken");
+            if (!token) {
+              console.error("No token found");
+              return;
+            }
+
+    const endpoint = type === "ai" 
+    ? `${process.env.REACT_APP_API_URL}/ai-notes/${id}`
+    : `${process.env.REACT_APP_API_URL}/notes/${id}`;
+
+
     const response = await fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
-      method: "DELETE",
-    });
+          method: "DELETE",  
+          headers: {
+                Authorization: `Bearer ${token}`
+          },
+        });
+
+
     if (response.status === 200) {
-      setNotes((prev) => prev.filter((note) => note._id !== id));
+      if (type === 'ai') {
+        setAiNotes((prev) => prev.filter((note) => note._id !== id)); 
+      } else {
+        setNotes((prev) => prev.filter((note) => note._id !== id)); 
+      }
       alert("Note deleted successfully");
     }
   } catch (error) {
@@ -102,15 +103,24 @@ const handleDelete = async (id) => {
   //normal
   const handleSaveEdit = async () => {
     try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
       const response = await axios.put(`${process.env.REACT_APP_API_URL}/notes/${editNote.id}`, 
         {
           title: editNote.title,
           text: editNote.text,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
     if (response.status === 200) {
-      // const updatedNote = response.data;
       setNotes((prev) => 
         prev.map((note) => (note._id === editNote.id ? response.data : note))
       );
