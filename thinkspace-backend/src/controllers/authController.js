@@ -227,4 +227,74 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, sendotp };
+
+const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.id; // This comes from the auth middleware
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'Both current password and new password are required'
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: 'New password must be at least 8 characters long'
+            });
+        }
+
+        const existingUser = await User.findById(userId);
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        const isPasswordMatch = await bcrypt.compare(currentPassword, existingUser.password);
+        if (!isPasswordMatch) {
+            return res.status(403).json({
+                success: false,
+                message: 'Current password is incorrect'
+            });
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update password in database
+        existingUser.password = hashedNewPassword;
+        await existingUser.save();
+
+        // Generate new token with updated info
+        const payload = {
+            email: existingUser.email,
+            id: existingUser._id,
+        };
+        
+        const token = jwt.sign(
+            payload, 
+            process.env.JWT_SECRET, 
+            { expiresIn: "2h" }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Password changed successfully',
+            token 
+        });
+
+    } catch (error) {
+        console.error("Change password error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong while changing password",
+            error: error.message
+        });
+    }
+};
+
+module.exports = { signup, login, sendotp, changePassword };

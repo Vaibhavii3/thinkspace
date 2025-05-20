@@ -1,39 +1,54 @@
 const jwt = require('jsonwebtoken');
-require("dotenv").config();
+require('dotenv').config();
 
-const authMiddleware = (req, res, next) => {
-    try{
-
-        const token = req.body.token || (req.header("Authorization") && req.header("Authorization").replace("Bearer ", ""));
-
+const authMiddleware = async (req, res, next) => {
+    try {
+        // Get token from the Authorization header
+        const authHeader = req.headers.authorization;
         
-        if(!token) {
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({
-                success:false,
-                message:'Token is missing',
+                success: false,
+                message: 'Authorization token missing or invalid format'
             });
         }
-    
-    try{
-        const payload = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("JWT", payload);
-        req.user = payload;
-        next();
-    } catch(error) {
-        return res.status(401).json({
-            success:false,
-            message: 'token is invalid',
+
+        // Extract the token
+        const token = authHeader.split(' ')[1];
+        
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Authorization token not provided'
+            });
+        }
+
+        try {
+            // Verify the token
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            
+            // Add user info to request
+            req.user = {
+                id: decoded.id,
+                email: decoded.email
+            };
+            
+            next();
+        } catch (error) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid or expired token',
+                error: error.message
+            });
+        }
+    } catch (error) {
+        console.error("Auth middleware error:", error);
+        return res.status(500).json({
+            success: false,
+            message: 'Something went wrong with authentication',
             error: error.message
         });
     }
-    }
-    catch(error) {
-        return res.status(401).json({
-            success:false,
-            message:'Something went wrong, while verifying the token',
-            error:error.message,
-        });
-    }
-}
+};
 
 module.exports = authMiddleware;
