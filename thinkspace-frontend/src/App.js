@@ -8,11 +8,14 @@ import ProfilePage from './components/ProfilePage';
 import SavedNotes from './components/SavedNotes';
 import AiGenerate from './components/AiGenerate';
 import DailyTask from './components/DailyTask';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
     return (
-      
+      <>
+      <Toaster position='top-right' reverseOrder={false} />
+
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -25,6 +28,8 @@ function App() {
           <Route path="/DailyTask" element={<DailyTask />} />
         </Routes>
       </Router>
+
+      </>
     );
 }
 

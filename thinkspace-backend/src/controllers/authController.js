@@ -131,7 +131,7 @@ const signup = async (req, res) => {
         });
         
         const token = jwt.sign(
-            { id: user._id, email: user.email }, 
+            { id: user._id, email: user.email, name: user.name }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
@@ -184,6 +184,7 @@ const login = async (req, res) => {
         const payload = {
             email:user.email,
             id:user._id,
+            name: user.name
         };
 
         
@@ -200,15 +201,6 @@ const login = async (req, res) => {
             _id: user._id,
             token,
         };
-
-            // user = user.toObject();
-            // user.token = token;
-            // user.password = undefined;
-
-            // const options = {
-            //     expires: new Date( Date.now() + 3*24*60*60*1000),
-            //     httpOnly:true,
-            // }
 
             return res.status(200).json({
                 success:true,

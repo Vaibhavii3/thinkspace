@@ -30,7 +30,6 @@
   }
 }
 
-/* Header Styling */
 .saved-notes-title {
   padding: 10px 20px 30px;
   text-align: center;
@@ -59,7 +58,6 @@
   border-radius: 2px;
 }
 
-/* Toggle Buttons */
 .toggle-buttons {
   display: flex;
   justify-content: center;
@@ -123,7 +121,6 @@
   transform: translateY(0);
 }
 
-/* Notes Grid */
 .notes-grid {
   display: flex;
   flex-wrap: wrap;
@@ -134,7 +131,6 @@
   perspective: 1000px;
 }
 
-/* Empty State */
 .notes-grid p {
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.8);
@@ -183,9 +179,9 @@
 .note-box h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   position: relative;
-  padding-bottom: 10px;
+  padding-bottom: 27px;
   color: #1a2a6c;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -212,7 +208,6 @@
   color: #555;
 }
 
-/* Buttons Container */
 .buttons {
   display: flex;
   gap: 10px;
@@ -226,7 +221,6 @@
   opacity: 1;
 }
 
-/* Button Styles */
 button {
   border: none;
   padding: 8px 14px;
@@ -266,7 +260,6 @@ button.delete-btn:hover {
   transform: translateY(-2px);
 }
 
-/* Edit Form */
 .edit-note-form {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -338,7 +331,6 @@ textarea.input {
   transform: translateY(0);
 }
 
-/* Responsive Styles */
 @media screen and (max-width: 768px) {
   .saved-notes-container {
     padding: 20px 15px;
@@ -371,7 +363,6 @@ textarea.input {
   }
 }
 
-/* Animation for Note Addition */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -387,7 +378,6 @@ textarea.input {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* Alert Styling */
 .alert {
   position: fixed;
   top: 20px;

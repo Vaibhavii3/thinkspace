@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaSave, FaMagic, FaUser, FaSignOutAlt, FaPenNib, FaLeaf } from "react-icons/fa";
 import axios from "axios";
 import "../styles/Dashboard.css";
+import { jwtDecode } from "jwt-decode";
 
 const Dashboard = () => {
   const [text, setText] = useState("");
@@ -28,18 +29,13 @@ const Dashboard = () => {
           return;
         }
         
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+        const decoded = jwtDecode(token);
+        console.log(decoded);
         
-        if (response.data.success) {
-          setUser({
-            name: response.data.user.name,
-            profilePicture: response.data.user.image
-          });
-        }
+        setUser({
+          name: decoded.name,
+          profilePicture: decoded.image
+        })
       } catch (error) {
         console.error("Error fetching user data:", error);
         // Handle token expiration or auth error

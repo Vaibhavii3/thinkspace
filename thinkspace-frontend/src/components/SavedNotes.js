@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import "../styles/saveNote.css";
+import toast from "react-hot-toast";
 
 const SavedNotes = () => {
   const [notes, setNotes] = useState([]);
@@ -56,10 +57,7 @@ const SavedNotes = () => {
     fetchAiNotes();
   }, []);
 
-  // Fix handleDelete
 const handleDelete = async (id, type = "normal") => {
-  const confirmDelete = window.confirm("Are you sure you want to delete this note?");
-  if (!confirmDelete) return;
 
   const token = localStorage.getItem("authToken");
   if (!token) {
@@ -84,11 +82,11 @@ const handleDelete = async (id, type = "normal") => {
       } else {
         setNotes((prev) => prev.filter((note) => note._id !== id)); 
       }
-      alert("Note deleted successfully");
+      toast.success("Note deleted successfully");
     }
   } catch (error) {
     console.error("Error deleting the note:", error);
-    alert("Failed to delete the note. Please try again.")
+    toast.error("Failed to delete the note. Please try again.")
   }
 };
   
@@ -122,7 +120,7 @@ const handleDelete = async (id, type = "normal") => {
       setNotes((prev) => 
         prev.map((note) => (note._id === editNote.id ? response.data : note))
       );
-      alert("Note updated successfully");
+      toast.success("Note updated successfully");
       setIsEditing(false);
     }
   } catch (error) {
