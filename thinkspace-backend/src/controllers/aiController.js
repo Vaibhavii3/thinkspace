@@ -5,7 +5,7 @@ const Content = require('../models/Content');
 const generateAIContent = async (req, res) => {
     const { prompt } = req.body;
 
-    if (!prompt) {
+    if (!prompt || typeof prompt !== 'string') {
         return res.status(400).json({ error: "Prompt is required" });
     }
 
@@ -17,10 +17,15 @@ const generateAIContent = async (req, res) => {
 
         // Prepare the request body
         const requestBody = {
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            contents: [
+                { 
+                    role: "user", 
+                    parts: [{ text: prompt }] 
+                }
+            ],
             generationConfig: {
-            maxOutputTokens: 250,
-            temperature: 0.7,
+                maxOutputTokens: 250,
+                temperature: 0.7,
             },
         };
 
@@ -28,7 +33,7 @@ const generateAIContent = async (req, res) => {
         const response = await axios.post(`${apiUrl}?key=${apiKey}`, requestBody, { 
             headers: {
                 "Content-Type": "application/json",
-                "x-goog-api-key": apiKey,
+                // "x-goog-api-key": apiKey,
             }
         });
 
@@ -45,7 +50,7 @@ const generateAIContent = async (req, res) => {
         res.status(200).json({ result: generatedContent });
 
     } catch (error) {
-        console.error("Error with AI content generation:", error);
+        console.error("Error with AI content generation:", error.response?.data || error.messsage);
 
         res.status(400).json({
             error: error.response?.data?.error || "Invalid request to Gemini AI API",
