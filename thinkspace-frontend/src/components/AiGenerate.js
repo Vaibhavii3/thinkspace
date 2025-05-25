@@ -48,22 +48,35 @@ function AiGenerate() {
         }
 
         try {
+
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                setSaveMessage("Please log in to save notes.");
+                return;
+            }
+
             const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/ai-notes/save-ai-note`,
+                `${process.env.REACT_APP_API_URL}/ai-notes/save`,
                 { title, content: result },
-                { headers: { "Content-Type": "application/json" } }
+                { 
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    } 
+                }
             );
 
             if (response.status === 200 || response.status === 201) {
                 setSaveMessage("Note saved successfully!");
                 setTitle("");
                 setResult("");
+                setPrompt("");
             } else {
                 setSaveMessage("Failed to save the note.");
             }
         } catch (error) {
             console.error("Error saving note:", error);
-            setSaveMessage("An error occurred while saving.");
+            setSaveMessage(`An error occurred while saving: ${error.response?.data?.error || error.message}`);
         }
     };
     
@@ -90,8 +103,24 @@ function AiGenerate() {
                 {result && (
                     <div className="result">
                         <h3 className="result-title">Generated Content:</h3>
-                        <button onClick={handleSave} className="save-btn">Save</button>
+
+                        {/* add title input field  */}
+                        <div className="save-section"> 
+                            <input 
+                                type="text"
+                                value={[title]}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter a title for this note..."
+                                className="title-input"
+                            />
+
+
+                            <button onClick={handleSave} className="save-btn" disabled={!title.trim()}>Save Note</button>
+
+                        </div>
+
                         {saveMessage && <p className="save-message">{saveMessage}</p>}
+                        
                         <ul className="result-content">
                             {result.split("\n").filter(line => line.trim() !== "").map((line, index) => (
                                 <li key={index}>{line}</li>

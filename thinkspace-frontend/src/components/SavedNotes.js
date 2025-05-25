@@ -32,8 +32,6 @@ const SavedNotes = () => {
     fetchNotes();
   }, []);
 
-  
-
   // fetch ai-gen notes
   useEffect(() => {
     const fetchAiNotes = async () => {
@@ -70,14 +68,18 @@ const handleDelete = async (id, type = "normal") => {
     ? `${process.env.REACT_APP_API_URL}/ai-notes/${id}`
     : `${process.env.REACT_APP_API_URL}/notes/${id}`;
 
+    // const response = await fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
+    //       method: "DELETE",  
+    //       headers: {
+    //             Authorization: `Bearer ${token}`
+    //       },
+    //     });
 
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
-          method: "DELETE",  
-          headers: {
-                Authorization: `Bearer ${token}`
-          },
-        });
-
+    const response = await axios.delete(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (response.status === 200) {
       if (type === 'ai') {
@@ -92,8 +94,6 @@ const handleDelete = async (id, type = "normal") => {
   }
 };
   
-
-
   //normal 
   const handleEditClick = (note) => {
     setEditNote({ id: note._id, title: note.title, text: note.text });
@@ -163,13 +163,6 @@ const handleDelete = async (id, type = "normal") => {
     <div>
       {isEditing ? (
         <div className="edit-note-form">
-          {/* <input
-            type="text"
-            value={editNote.title}
-            onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
-            placeholder="Edit Title"
-            className="input"
-          /> */}
           <textarea
             value={editNote.text}
             onChange={(e) => setEditNote({ ...editNote, text: e.target.value })}

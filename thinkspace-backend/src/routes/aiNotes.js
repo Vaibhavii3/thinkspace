@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { saveAiNote, getAllAiNotes } = require("../controllers/aiNotesController");
-// const { saveAiNote } = require("../controllers/aiNotesController");
+const { saveAiNote, getAllAiNotes, deleteAiNote } = require("../controllers/aiNotesController");
+const auth = require('../middlewares/authMiddleware.js');
 
-// Route to save AI-generated notes
-// router.post("/save-ai-note", saveAiNote);
+router.use(auth);
+
 router.post("/save", saveAiNote);
 
-// Route to fetch all AI-generated notes
 router.get("/", getAllAiNotes);
+
+router.delete('/:id', deleteAiNote);
 
 module.exports = router;
