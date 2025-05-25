@@ -9,6 +9,7 @@ const SavedNotes = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editNote, setEditNote] = useState({ id: "", title: "", text: "" });
   const [view, setView] = useState("normal");
+  const [selectedNote, setSelectedNote] = useState(null);
 
   //fetch notes
   useEffect (() => {
@@ -57,24 +58,20 @@ const SavedNotes = () => {
 
   // Fix handleDelete
 const handleDelete = async (id, type = "normal") => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this note?");
+  if (!confirmDelete) return;
+
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    console.error("No token found");
+    return;
+  }
+  
+  const endpoint = type === "ai" 
+  ? `${process.env.REACT_APP_API_URL}/ai-notes/${id}`
+  : `${process.env.REACT_APP_API_URL}/notes/${id}`;
+  
   try {
-    const token = localStorage.getItem("authToken");
-            if (!token) {
-              console.error("No token found");
-              return;
-            }
-
-    const endpoint = type === "ai" 
-    ? `${process.env.REACT_APP_API_URL}/ai-notes/${id}`
-    : `${process.env.REACT_APP_API_URL}/notes/${id}`;
-
-    // const response = await fetch(`${process.env.REACT_APP_API_URL}/notes/${id}`, {
-    //       method: "DELETE",  
-    //       headers: {
-    //             Authorization: `Bearer ${token}`
-    //       },
-    //     });
-
     const response = await axios.delete(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -91,6 +88,7 @@ const handleDelete = async (id, type = "normal") => {
     }
   } catch (error) {
     console.error("Error deleting the note:", error);
+    alert("Failed to delete the note. Please try again.")
   }
 };
   
@@ -163,6 +161,13 @@ const handleDelete = async (id, type = "normal") => {
     <div>
       {isEditing ? (
         <div className="edit-note-form">
+          <input
+                type="text"
+                value={editNote.title}
+                onChange={(e) => setEditNote({ ...editNote, title: e.target.value })}
+                placeholder="Edit Title"
+                className="input"
+              />
           <textarea
             value={editNote.text}
             onChange={(e) => setEditNote({ ...editNote, text: e.target.value })}
@@ -177,9 +182,9 @@ const handleDelete = async (id, type = "normal") => {
           {
           notes.length === 0 ? <p> No saved notes available. </p> :
           notes.map((note) => (
-            <div key={note._id} className="note-box">
+            <div key={note._id} className="note-box" >
                 <h3>{note.title}</h3>
-                <p>{note.text}</p>
+                <p onClick={() => setSelectedNote(note)}>{note.text}</p>
                 <div className="buttons">
                   <button className="edit-btn" onClick={() => handleEditClick(note)}><FaEdit /></button>
 
@@ -199,7 +204,7 @@ const handleDelete = async (id, type = "normal") => {
               aiNotes.map((note) => (
                 <div key={note._id} className="note-box">
                   <h3>{note.title}</h3>
-                  <p>{note.content}</p>
+                  <p onClick={() => setSelectedNote(note)}>{note.content}</p>
                   <div className="buttons">
                     <button
                       className="delete-btn"
@@ -211,7 +216,18 @@ const handleDelete = async (id, type = "normal") => {
                 </div>
               ))}
             </div>
-    )}
+      )}
+
+      {/* model-style detail view  */}
+      {selectedNote && (
+        <div className="note-detail-modal">
+          <div className="note-detail-box">
+            <h2 className="model-title">{selectedNote.title}</h2>
+            <p className="model-title">{selectedNote.text || selectedNote.content}</p>
+            <button className="close-btn" onClick={() => setSelectedNote(null)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
