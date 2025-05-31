@@ -73,7 +73,7 @@ function DailyTask() {
         console.error("No token found");
         return;
       }
-      // Update on server
+      
       await axios.put(
         `${process.env.REACT_APP_API_URL}/tasks/${taskId}`,
         { completed: true },
@@ -96,7 +96,7 @@ function DailyTask() {
   const getTaskDataForHeatmap = () => {
     const streakData = {};
 
-    // Aggregate completed tasks by date
+    
     tasks.forEach((task) => {
       const taskDate = new Date(task.date).toISOString().split("T")[0];
       if (task.completed) {
@@ -104,7 +104,7 @@ function DailyTask() {
       }
     });
 
-    // Format data for heatmap
+    
     return Object.keys(streakData).map((date) => ({
       date: new Date(date),
       count: streakData[date],
@@ -118,7 +118,7 @@ function DailyTask() {
         console.error("No token found");
         return;
       }
-      // Update on server
+    
       await axios.put(
         `${process.env.REACT_APP_API_URL}/tasks/${taskId}`,
         {
@@ -148,7 +148,7 @@ function DailyTask() {
         console.error("No token found");
         return;
       }
-      // Delete from server
+      
       await axios.delete(`${process.env.REACT_APP_API_URL}/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -165,7 +165,7 @@ function DailyTask() {
     <div className="dailytaskpage">
       <h1 className="head">Daily Task</h1>
 
-      {/* Task Form */}
+      
       <div className="task-form">
         <input
           type="text"
@@ -186,7 +186,7 @@ function DailyTask() {
             checked={sendEmailReminder}
             onChange={(e) => setSendEmailReminder(e.target.checked)}
           />
-          Send Email Reminder
+            Send Reminder
         </label>
 
         <div className="date-display">
@@ -196,12 +196,12 @@ function DailyTask() {
       </div>
 
       <div className="both-container">
-        {/* Calendar */}
+        
         <div className="calendar-container">
           <Calendar onChange={setDate} value={date} className="custom-calendar" />
         </div>
 
-        {/* Current Day Tasks */}
+      
         <div className="current-day-tasks">
           <h2>Tasks for {date.toDateString()}</h2>
 
@@ -231,7 +231,7 @@ function DailyTask() {
         </div>
       </div>
 
-      {/* Streak Progress */}
+  
       <div className="streak-progress">
         <h2>Streak Progress</h2>
 
@@ -242,9 +242,9 @@ function DailyTask() {
             values={getTaskDataForHeatmap()}
             classForValue={(value) => {
               if (!value || value.count === undefined) {
-                return "color-scale-0"; // Default color for null/undefined count
+                return "color-scale-0"; 
               }
-              return `color-scale-${Math.min(value.count, 6)}`; // Use count to determine the class
+              return `color-scale-${Math.min(value.count, 6)}`; 
             }}
             showWeekdayLabels={true}
             showMonthLabels={true}
