@@ -23,7 +23,7 @@ connectDB();
 
 // Middleware
 app.use(cors({ 
-    origin: "https://thinkspace-mu.vercel.app/",
+    origin: "https://thinkspace-mu.vercel.app",
     credentials: true,
 }));
 // app.use(cors());
