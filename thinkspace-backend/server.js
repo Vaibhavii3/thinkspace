@@ -22,8 +22,11 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Middleware
-// app.use(cors({ origin: "http://thinkspace-seven.vercel.app"}));
-app.use(cors());
+app.use(cors({ 
+    origin: "https://thinkspace-mu.vercel.app/",
+    credentials: true,
+}));
+// app.use(cors());
 app.use(bodyParser.json());
 
 
